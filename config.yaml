@@ -1,0 +1,41 @@
+# Single source of truth for the pipeline. Every tunable lives here; nothing is hardcoded.
+
+Model:
+  # Model-agnostic: swap Id / BaseUrl for the bake-off, nothing else changes.
+  Provider: fireworks
+  Id: "accounts/fireworks/models/kimi-k2p6"
+  BaseUrl: "https://api.fireworks.ai/inference/v1"
+  Temperature: 0.4
+  MaxTokens: 512
+  ReasoningEffort: none    # none | low | medium | high — 'none' disables kimi-k2p6's chain-of-thought leak
+
+Frames:
+  # Clips are strictly 30s-2min. Sample PerThirtySeconds frames per 30s of duration,
+  # across the whole clip, clamped to MaxTotal.
+  PerThirtySeconds: 6
+  MaxTotal: 24            # hard-clamped to 30 in code (Fireworks per-request image limit)
+  Width: 512             # downscale longest edge, keeps payload + latency low
+  JpegQuality: 85
+  Strategy: uniform       # uniform | keyframe
+  MaxPayloadMB: 9.0       # safety guard under Fireworks' 10MB total-base64 limit
+  Source: stream          # stream (ffmpeg reads the URL) | download (fetch full clip first)
+  EnableFallback: true    # if the primary Source fails, automatically try the other way
+
+Client:
+  TimeoutSeconds: 30
+  MaxRetries: 3
+  BackoffSeconds: 2.0
+
+Runtime:
+  MaxWorkers: 6           # concurrent (task, style) captioning units
+
+Paths:
+  Input: "/input/tasks.json"
+  Output: "/output/results.json"
+  WorkDir: "/tmp/VideoCaptioning"
+
+DefaultStyles:
+  - formal
+  - sarcastic
+  - humorous_tech
+  - humorous_non_tech
