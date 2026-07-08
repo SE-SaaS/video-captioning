@@ -1,14 +1,10 @@
-# The styles definitions 
-formal = "Professional, objective, factual. No humor, no opinion."
-sarcastic = "Dry, ironic, lightly mocking — but still accurate about what happens."
-humorous_tech = "Funny, using technology or programming references/metaphors."
-humorous_non_tech = "Funny, everyday humor, zero technical jargon."
+# Prompt data + builder for the captioner. Keys match ECaptionStyle values.
 
 styles_definitions = {
     "formal": "Professional, objective, factual. No humor, no opinion.",
     "sarcastic": "Dry, ironic, lightly mocking — but still accurate about what happens.",
     "humorous_tech": "Funny, using technology or programming references/metaphors.",
-    "humorous_non_tech": "Funny, everyday humor, zero technical jargon."
+    "humorous_non_tech": "Funny, everyday humor, zero technical jargon.",
 }
 
 few_shot_examples = {
@@ -49,8 +45,17 @@ Rules:
 - One or two sentences. English only.
 - Output ONLY the caption text — no labels, quotes, or explanation.
 
-Style = {style}: {styles_definitions[style]}
+Style = {style}: {style_definition}
 
 Examples of this style:
-{few_shot_examples[style]}
+{examples}
 """
+
+
+def BuildSystemPrompt(style: str) -> str:
+    Examples = "\n".join(f"- {Example}" for Example in few_shot_examples[style])
+    return system_prompt.format(
+        style=style,
+        style_definition=styles_definitions[style],
+        examples=Examples,
+    )

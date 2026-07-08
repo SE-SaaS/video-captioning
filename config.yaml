@@ -30,9 +30,15 @@ Runtime:
   MaxWorkers: 6           # concurrent (task, style) captioning units
 
 Paths:
-  Input: "/input/tasks.json"
-  Output: "/output/results.json"
-  WorkDir: "/tmp/VideoCaptioning"
+  # Auto-selected at load time: Docker set inside a container (/.dockerenv present), Local otherwise.
+  Docker:
+    Input: "/input/tasks.json"
+    Output: "/output/results.json"
+    WorkDir: "/tmp/VideoCaptioning"
+  Local:
+    Input: "io/input/tasks.json"
+    Output: "io/output/results.json"
+    WorkDir: "io/work"
 
 DefaultStyles:
   - formal

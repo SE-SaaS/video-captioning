@@ -1,3 +1,4 @@
+# FrameSampler: uses ffmpeg to sample and downscale frames from a video (URL or path).
 import math
 import subprocess
 

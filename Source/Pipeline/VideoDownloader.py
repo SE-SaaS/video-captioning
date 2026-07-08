@@ -1,3 +1,4 @@
+# VideoDownloader: fetches a remote video to the work dir (fallback for the stream path).
 import os
 import time
 

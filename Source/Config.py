@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 import yaml
@@ -54,6 +55,12 @@ class FConfig:
     DefaultStyles: list[str]
 
 
+def SelectPaths(RawPaths: dict) -> dict:
+    # Docker always creates /.dockerenv in a container; use the Docker paths there, Local otherwise.
+    bInDocker: bool = os.path.exists("/.dockerenv")
+    return RawPaths["Docker"] if bInDocker else RawPaths["Local"]
+
+
 def LoadConfig(ConfigPath: str = "config.yaml") -> FConfig:
     with open(ConfigPath, "r", encoding="utf-8") as ConfigFile:
         RawConfig: dict = yaml.safe_load(ConfigFile)
@@ -63,6 +70,6 @@ def LoadConfig(ConfigPath: str = "config.yaml") -> FConfig:
         Frames=FFramesConfig(**RawConfig["Frames"]),
         Client=FClientConfig(**RawConfig["Client"]),
         Runtime=FRuntimeConfig(**RawConfig["Runtime"]),
-        Paths=FPathsConfig(**RawConfig["Paths"]),
+        Paths=FPathsConfig(**SelectPaths(RawConfig["Paths"])),
         DefaultStyles=RawConfig["DefaultStyles"],
     )

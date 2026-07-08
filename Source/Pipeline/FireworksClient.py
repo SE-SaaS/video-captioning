@@ -1,3 +1,4 @@
+# FireworksClient: sends frames + prompts to the Fireworks chat API, with retries.
 import base64
 import os
 import time
