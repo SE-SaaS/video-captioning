@@ -218,3 +218,4 @@ __marimo__/
 .streamlit/secrets.toml
 io/input/tasks.json
 io/output/results.json
+local_test_log.txt

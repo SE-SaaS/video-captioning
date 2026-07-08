@@ -210,6 +210,11 @@ def Main() -> int:
     Results: list[FCaptionResult] = BuildResults(Tasks, CaptionsByTask)
     WriteResults(Config.Paths.Output, Results)
     LogRunLocally(Config, Tasks, Results)
+
+    OutputPayload: list[dict] = [
+        {"task_id": Result.TaskId, "captions": Result.Captions} for Result in Results
+    ]
+    print(json.dumps(OutputPayload, ensure_ascii=False, indent=2))
     return 0
 
 

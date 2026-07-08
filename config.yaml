@@ -7,7 +7,7 @@ Model:
   BaseUrl: "https://api.fireworks.ai/inference/v1"
   Temperature: 0.4
   MaxTokens: 2000
-  ReasoningEffort: low    # none | low | medium | high — 'none' disables kimi-k2p6's chain-of-thought leak
+  ReasoningEffort: none    # none | low | medium | high — 'none' disables kimi-k2p6's chain-of-thought leak
 
 Frames:
   # Clips are strictly 30s-2min. Sample PerThirtySeconds frames per 30s of duration,
