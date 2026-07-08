@@ -1,0 +1,173 @@
+import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+from Source.Config import FConfig, LoadConfig
+from Source.Pipeline.Captioner import FCaptioner
+from Source.Pipeline.FireworksClient import FFireworksClient
+from Source.Pipeline.FrameSampler import FFrameSampler
+from Source.Pipeline.VideoDownloader import FVideoDownloader
+from Source.Schema.IOSchema import LoadTasks, MissingStyles, WriteResults
+from Source.Schema.Models import FCaptionResult, FVideoTask
+
+
+# Last-resort caption so a failed clip still emits every requested style (valid JSON,
+# no missing key) instead of zeroing the whole clip on a malformed/incomplete result.
+FallbackCaption: str = "A short video clip."
+
+
+def LoadDotEnvIfPresent() -> None:
+    # Local development convenience; a no-op inside the submitted image.
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv()
+    except ImportError:
+        pass
+
+
+def AcquireFrames(
+    Task: FVideoTask,
+    Config: FConfig,
+    Sampler: FFrameSampler,
+    Downloader: FVideoDownloader,
+) -> list[bytes]:
+    def StreamAttempt() -> list[bytes]:
+        return Sampler.SampleFrames(Task.VideoUrl)
+
+    def DownloadAttempt() -> list[bytes]:
+        LocalPath: str = Downloader.DownloadVideo(Task.VideoUrl, Task.TaskId)
+        return Sampler.SampleFrames(LocalPath)
+
+    bStreamFirst: bool = Config.Frames.Source == "stream"
+    Attempts: list = (
+        [StreamAttempt, DownloadAttempt]
+        if bStreamFirst
+        else [DownloadAttempt, StreamAttempt]
+    )
+    if not Config.Frames.EnableFallback:
+        Attempts = Attempts[:1]
+
+    LastError: Exception | None = None
+    for Attempt in Attempts:
+        try:
+            return Attempt()
+        except Exception as CaughtError:
+            LastError = CaughtError
+    raise RuntimeError(f"Frame acquisition failed for task '{Task.TaskId}': {LastError}")
+
+
+def AcquireAllFrames(
+    Tasks: list[FVideoTask],
+    Config: FConfig,
+    Sampler: FFrameSampler,
+    Downloader: FVideoDownloader,
+) -> dict[str, list[bytes]]:
+    FramesByTask: dict[str, list[bytes]] = {}
+    with ThreadPoolExecutor(max_workers=Config.Runtime.MaxWorkers) as Executor:
+        FutureMap: dict = {
+            Executor.submit(AcquireFrames, Task, Config, Sampler, Downloader): Task
+            for Task in Tasks
+        }
+        for Future in as_completed(FutureMap):
+            Task: FVideoTask = FutureMap[Future]
+            try:
+                FramesByTask[Task.TaskId] = Future.result()
+            except Exception as CaughtError:
+                print(f"[warn] {CaughtError}", file=sys.stderr)
+                FramesByTask[Task.TaskId] = []
+    return FramesByTask
+
+
+def GenerateAllCaptions(
+    Tasks: list[FVideoTask],
+    FramesByTask: dict[str, list[bytes]],
+    Config: FConfig,
+    Captioner: FCaptioner,
+) -> dict[str, dict[str, str]]:
+    CaptionsByTask: dict[str, dict[str, str]] = {Task.TaskId: {} for Task in Tasks}
+    with ThreadPoolExecutor(max_workers=Config.Runtime.MaxWorkers) as Executor:
+        FutureMap: dict = {}
+        for Task in Tasks:
+            Frames: list[bytes] = FramesByTask.get(Task.TaskId) or []
+            if not Frames:
+                continue
+            for Style in Task.Styles:
+                Future = Executor.submit(Captioner.GenerateCaption, Frames, Style)
+                FutureMap[Future] = (Task.TaskId, Style.value)
+
+        for Future in as_completed(FutureMap):
+            TaskId, StyleValue = FutureMap[Future]
+            try:
+                CaptionsByTask[TaskId][StyleValue] = Future.result()
+            except Exception as CaughtError:
+                print(
+                    f"[warn] caption failed {TaskId}/{StyleValue}: {CaughtError}",
+                    file=sys.stderr,
+                )
+    return CaptionsByTask
+
+
+def BuildResults(
+    Tasks: list[FVideoTask],
+    CaptionsByTask: dict[str, dict[str, str]],
+) -> list[FCaptionResult]:
+    Results: list[FCaptionResult] = []
+    for Task in Tasks:
+        Result: FCaptionResult = FCaptionResult(
+            TaskId=Task.TaskId,
+            Captions=dict(CaptionsByTask.get(Task.TaskId, {})),
+        )
+        for Style in MissingStyles(Task, Result):
+            Result.Captions[Style.value] = FallbackCaption
+        Results.append(Result)
+    return Results
+
+
+def Main() -> int:
+    LoadDotEnvIfPresent()
+    Config: FConfig = LoadConfig()
+    Tasks: list[FVideoTask] = LoadTasks(Config.Paths.Input, Config.DefaultStyles)
+
+    Sampler: FFrameSampler = FFrameSampler(
+        PerThirtySeconds=Config.Frames.PerThirtySeconds,
+        MaxTotal=Config.Frames.MaxTotal,
+        Width=Config.Frames.Width,
+        JpegQuality=Config.Frames.JpegQuality,
+        MaxPayloadMB=Config.Frames.MaxPayloadMB,
+        TimeoutSeconds=Config.Client.TimeoutSeconds,
+    )
+    Downloader: FVideoDownloader = FVideoDownloader(
+        WorkDir=Config.Paths.WorkDir,
+        TimeoutSeconds=Config.Client.TimeoutSeconds,
+        MaxRetries=Config.Client.MaxRetries,
+        BackoffSeconds=Config.Client.BackoffSeconds,
+    )
+    Client: FFireworksClient = FFireworksClient(
+        ModelId=Config.Model.Id,
+        BaseUrl=Config.Model.BaseUrl,
+        TimeoutSeconds=Config.Client.TimeoutSeconds,
+        MaxRetries=Config.Client.MaxRetries,
+        BackoffSeconds=Config.Client.BackoffSeconds,
+        MaxTokens=Config.Model.MaxTokens,
+        Temperature=Config.Model.Temperature,
+        ReasoningEffort=Config.Model.ReasoningEffort,
+    )
+    Captioner: FCaptioner = FCaptioner(Client)
+
+    FramesByTask: dict[str, list[bytes]] = AcquireAllFrames(
+        Tasks, Config, Sampler, Downloader
+    )
+    CaptionsByTask: dict[str, dict[str, str]] = GenerateAllCaptions(
+        Tasks, FramesByTask, Config, Captioner
+    )
+    Results: list[FCaptionResult] = BuildResults(Tasks, CaptionsByTask)
+    WriteResults(Config.Paths.Output, Results)
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(Main())
+    except Exception as FatalError:
+        print(f"[fatal] {FatalError}", file=sys.stderr)
+        sys.exit(1)
