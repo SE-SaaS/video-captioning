@@ -182,8 +182,16 @@ def LogRunLocally(
         print(f"[warn] local run logging failed: {CaughtError}", file=sys.stderr)
 
 
+# Each provider reads its key from a conventional env var; no need to name it in config.
+ProviderApiKeyEnv: dict[str, str] = {
+    "fireworks": "FIREWORKS_API_KEY",
+    "google": "GEMINI_API_KEY",
+}
+
+
 def BuildClient(ModelConfig: object, ClientConfig: FClientConfig) -> FFireworksClient:
     # ModelConfig is an FModelConfig or FJudgeConfig; both share the fields used here.
+    ApiKeyEnv: str = ProviderApiKeyEnv.get(ModelConfig.Provider.lower(), "FIREWORKS_API_KEY")
     return FFireworksClient(
         ModelId=ModelConfig.Id,
         BaseUrl=ModelConfig.BaseUrl,
@@ -193,6 +201,7 @@ def BuildClient(ModelConfig: object, ClientConfig: FClientConfig) -> FFireworksC
         MaxTokens=ModelConfig.MaxTokens,
         Temperature=ModelConfig.Temperature,
         ReasoningEffort=ModelConfig.ReasoningEffort,
+        ApiKeyEnv=ApiKeyEnv,
     )
 
 

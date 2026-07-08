@@ -17,6 +17,7 @@ class FFireworksClient:
         MaxTokens: int,
         Temperature: float,
         ReasoningEffort: str = "none",
+        ApiKeyEnv: str = "FIREWORKS_API_KEY",
         ApiKey: str | None = None,
     ) -> None:
         self.ModelId: str = ModelId
@@ -28,10 +29,10 @@ class FFireworksClient:
         self.Temperature: float = Temperature
         self.ReasoningEffort: str = ReasoningEffort
 
-        # Read the secret from the environment; allow an explicit override for tests.
-        self.ApiKey: str = ApiKey or os.environ.get("FIREWORKS_API_KEY", "")
+        # Read the secret from the configured env var; allow an explicit override for tests.
+        self.ApiKey: str = ApiKey or os.environ.get(ApiKeyEnv, "")
         if not self.ApiKey:
-            raise RuntimeError("FIREWORKS_API_KEY is not set in the environment.")
+            raise RuntimeError(f"{ApiKeyEnv} is not set in the environment.")
 
     def BuildImageContent(self, FrameBytes: bytes) -> dict:
         EncodedFrame: str = base64.b64encode(FrameBytes).decode("ascii")
