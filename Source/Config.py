@@ -53,6 +53,7 @@ class FConfig:
     Runtime: FRuntimeConfig
     Paths: FPathsConfig
     DefaultStyles: list[str]
+    StyleTemperatures: dict[str, float]
 
 
 def SelectPaths(RawPaths: dict) -> dict:
@@ -72,4 +73,5 @@ def LoadConfig(ConfigPath: str = "config.yaml") -> FConfig:
         Runtime=FRuntimeConfig(**RawConfig["Runtime"]),
         Paths=FPathsConfig(**SelectPaths(RawConfig["Paths"])),
         DefaultStyles=RawConfig["DefaultStyles"],
+        StyleTemperatures=RawConfig["StyleTemperatures"],
     )

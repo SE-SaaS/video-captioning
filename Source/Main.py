@@ -199,7 +199,7 @@ def Main() -> int:
         Temperature=Config.Model.Temperature,
         ReasoningEffort=Config.Model.ReasoningEffort,
     )
-    Captioner: FCaptioner = FCaptioner(Client)
+    Captioner: FCaptioner = FCaptioner(Client, Config.StyleTemperatures)
 
     FramesByTask: dict[str, list[bytes]] = AcquireAllFrames(
         Tasks, Config, Sampler, Downloader

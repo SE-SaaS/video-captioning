@@ -5,9 +5,16 @@ Model:
   Provider: fireworks
   Id: "accounts/fireworks/models/minimax-m3"
   BaseUrl: "https://api.fireworks.ai/inference/v1"
-  Temperature: 0.4
+  Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
   MaxTokens: 2000
   ReasoningEffort: none    # none | low | medium | high — 'none' disables kimi-k2p6's chain-of-thought leak
+
+# Per-style sampling temperature: low = precise/factual, high = creative/varied.
+StyleTemperatures:
+  formal: 0.1
+  sarcastic: 0.8
+  humorous_tech: 0.9
+  humorous_non_tech: 0.9
 
 Frames:
   # Clips are strictly 30s-2min. Sample PerThirtySeconds frames per 30s of duration,

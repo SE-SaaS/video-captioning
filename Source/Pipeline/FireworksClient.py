@@ -40,7 +40,13 @@ class FFireworksClient:
             "image_url": {"url": f"data:image/jpeg;base64,{EncodedFrame}"},
         }
 
-    def Complete(self, SystemPrompt: str, UserPrompt: str, Frames: list[bytes]) -> str:
+    def Complete(
+        self,
+        SystemPrompt: str,
+        UserPrompt: str,
+        Frames: list[bytes],
+        Temperature: float | None = None,
+    ) -> str:
         MessageContent: list[dict] = [{"type": "text", "text": UserPrompt}]
         for FrameData in Frames:
             MessageContent.append(self.BuildImageContent(FrameData))
@@ -50,10 +56,14 @@ class FFireworksClient:
             Messages.append({"role": "system", "content": SystemPrompt})
         Messages.append({"role": "user", "content": MessageContent})
 
+        # Per-call temperature overrides the client default when provided.
+        EffectiveTemperature: float = (
+            Temperature if Temperature is not None else self.Temperature
+        )
         RequestPayload: dict = {
             "model": self.ModelId,
             "max_tokens": self.MaxTokens,
-            "temperature": self.Temperature,
+            "temperature": EffectiveTemperature,
             "messages": Messages,
         }
         if self.ReasoningEffort:
