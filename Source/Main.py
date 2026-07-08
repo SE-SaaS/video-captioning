@@ -1,5 +1,8 @@
+import json
+import os
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 
 from Source.Config import FConfig, LoadConfig
 from Source.Pipeline.Captioner import FCaptioner
@@ -123,6 +126,50 @@ def BuildResults(
     return Results
 
 
+# Local-only test log: append model config + input/output to a repo txt file for
+# review. Best-effort and fully guarded so it can never affect the graded Docker run.
+LocalLogPath: str = "local_test_log.txt"
+
+
+def LogRunLocally(
+    Config: FConfig,
+    Tasks: list[FVideoTask],
+    Results: list[FCaptionResult],
+) -> None:
+    if os.path.exists("/.dockerenv"):
+        return  # Docker (grading) run — never log.
+    try:
+        InputPayload: list[dict] = [
+            {
+                "task_id": Task.TaskId,
+                "video_url": Task.VideoUrl,
+                "styles": [Style.value for Style in Task.Styles],
+            }
+            for Task in Tasks
+        ]
+        OutputPayload: list[dict] = [
+            {"task_id": Result.TaskId, "captions": Result.Captions} for Result in Results
+        ]
+        Entry: str = (
+            f"\n{'=' * 80}\n"
+            f"Timestamp:       {datetime.now().isoformat(timespec='seconds')}\n"
+            f"Model Id:        {Config.Model.Id}\n"
+            f"Base URL:        {Config.Model.BaseUrl}\n"
+            f"Temperature:     {Config.Model.Temperature}\n"
+            f"Max Tokens:      {Config.Model.MaxTokens}\n"
+            f"Reasoning:       {Config.Model.ReasoningEffort}\n"
+            f"Frames:          PerThirtySeconds={Config.Frames.PerThirtySeconds}, "
+            f"MaxTotal={Config.Frames.MaxTotal}, Width={Config.Frames.Width}, "
+            f"JpegQuality={Config.Frames.JpegQuality}\n"
+            f"Input:\n{json.dumps(InputPayload, ensure_ascii=False, indent=2)}\n"
+            f"Output:\n{json.dumps(OutputPayload, ensure_ascii=False, indent=2)}\n"
+        )
+        with open(LocalLogPath, "a", encoding="utf-8") as LogFile:
+            LogFile.write(Entry)
+    except Exception as CaughtError:
+        print(f"[warn] local run logging failed: {CaughtError}", file=sys.stderr)
+
+
 def Main() -> int:
     LoadDotEnvIfPresent()
     Config: FConfig = LoadConfig()
@@ -162,6 +209,7 @@ def Main() -> int:
     )
     Results: list[FCaptionResult] = BuildResults(Tasks, CaptionsByTask)
     WriteResults(Config.Paths.Output, Results)
+    LogRunLocally(Config, Tasks, Results)
     return 0
 
 

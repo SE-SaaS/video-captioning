@@ -1,12 +1,9 @@
 [
   {
     "task_id": "v1",
-    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
+    "video_url": "https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4",
     "styles": [
-      "formal",
-      "sarcastic",
-      "humorous_tech",
-      "humorous_non_tech"
+      "humorous_tech"
     ]
   }
 ]

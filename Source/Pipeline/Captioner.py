@@ -1,6 +1,6 @@
 # Captioner: builds the styled system prompt and asks the client for one caption.
 from Source.Pipeline.FireworksClient import FFireworksClient
-from Source.Pipeline.system_prompt import BuildSystemPrompt
+from Source.Pipeline.SystemPrompt import BuildSystemPrompt
 from Source.Schema.Models import ECaptionStyle
 
 
