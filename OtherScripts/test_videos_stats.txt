@@ -1,0 +1,21 @@
+animals_1.mp4           33.68 s
+animals_2.mp4           26.77 s
+food_1.mp4              27.50 s
+food_2.mp4              27.56 s
+nature_1.mp4            23.46 s
+nature_2.mp4            53.72 s
+people_1.mp4            75.99 s
+people_2.mp4            19.19 s
+sports_1.mp4            14.19 s
+sports_2.mp4            13.12 s
+tech_1.mp4              21.07 s
+tech_2.mp4              31.57 s
+urban_1.mp4             21.40 s
+urban_2.mp4             10.01 s
+weather_1.mp4            6.80 s
+weather_2.mp4           31.03 s
+--------------------------------
+count                      16
+mean duration           27.32 s
+max duration            75.99 s
+max duration            6.80  s
