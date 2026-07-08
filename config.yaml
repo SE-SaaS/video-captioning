@@ -1,13 +1,32 @@
 # Single source of truth for the pipeline. Every tunable lives here; nothing is hardcoded.
 
-Model:
-  # Model-agnostic: swap Id / BaseUrl for the bake-off, nothing else changes.
+# Candidate caption models. ONE entry -> single-model mode (no judge). TWO OR MORE
+# entries -> ensemble: every model captions each style, then Judge produces the final one.
+Models:
+  - Provider: fireworks
+    Id: "accounts/fireworks/models/minimax-m3"
+    BaseUrl: "https://api.fireworks.ai/inference/v1"
+    Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
+    MaxTokens: 2000
+    ReasoningEffort: none    # none | low | medium | high
+  # Add more models here to enable ensembling, e.g.:
+  # - Provider: fireworks
+  #   Id: "accounts/fireworks/models/kimi-k2p6"
+  #   BaseUrl: "https://api.fireworks.ai/inference/v1"
+  #   Temperature: 0.4
+  #   MaxTokens: 2000
+  #   ReasoningEffort: none
+
+# Judge LLM: only used when Models has 2+ entries. Picks the best candidate caption
+# or merges their best parts into one final caption per style.
+Judge:
   Provider: fireworks
   Id: "accounts/fireworks/models/minimax-m3"
   BaseUrl: "https://api.fireworks.ai/inference/v1"
-  Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
+  Temperature: 0.3
   MaxTokens: 2000
-  ReasoningEffort: none    # none | low | medium | high — 'none' disables kimi-k2p6's chain-of-thought leak
+  ReasoningEffort: none
+  PassFrames: true           # true = also send the video frames to the judge; false = captions only
 
 # Per-style sampling temperature: low = precise/factual, high = creative/varied.
 StyleTemperatures:

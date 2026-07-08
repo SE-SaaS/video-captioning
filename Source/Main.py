@@ -4,7 +4,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 
-from Source.Config import FConfig, LoadConfig
+from Source.Config import FClientConfig, FConfig, LoadConfig
 from Source.Pipeline.Captioner import FCaptioner
 from Source.Pipeline.FireworksClient import FFireworksClient
 from Source.Pipeline.FrameSampler import FFrameSampler
@@ -150,14 +150,26 @@ def LogRunLocally(
         OutputPayload: list[dict] = [
             {"task_id": Result.TaskId, "captions": Result.Captions} for Result in Results
         ]
+        bEnsemble: bool = len(Config.Models) > 1
+        ModelsSummary: str = "\n".join(
+            f"  - {ModelConfig.Id} (temp={ModelConfig.Temperature}, "
+            f"max_tokens={ModelConfig.MaxTokens}, reasoning={ModelConfig.ReasoningEffort})"
+            for ModelConfig in Config.Models
+        )
+        JudgeSummary: str = (
+            f"  {Config.Judge.Id} (temp={Config.Judge.Temperature}, "
+            f"max_tokens={Config.Judge.MaxTokens}, reasoning={Config.Judge.ReasoningEffort}, "
+            f"pass_frames={Config.Judge.PassFrames})"
+            if bEnsemble
+            else "  (disabled — single-model mode)"
+        )
         Entry: str = (
             f"\n{'=' * 80}\n"
             f"Timestamp:       {datetime.now().isoformat(timespec='seconds')}\n"
-            f"Model Id:        {Config.Model.Id}\n"
-            f"Base URL:        {Config.Model.BaseUrl}\n"
-            f"Temperature:     {Config.Model.Temperature}\n"
-            f"Max Tokens:      {Config.Model.MaxTokens}\n"
-            f"Reasoning:       {Config.Model.ReasoningEffort}\n"
+            f"Mode:            {'ensemble' if bEnsemble else 'single-model'}\n"
+            f"Models:\n{ModelsSummary}\n"
+            f"Judge:\n{JudgeSummary}\n"
+            f"StyleTemperatures: {Config.StyleTemperatures}\n"
             f"Frames:          PerThirtySeconds={Config.Frames.PerThirtySeconds}, "
             f"MaxTotal={Config.Frames.MaxTotal}, Width={Config.Frames.Width}, "
             f"JpegQuality={Config.Frames.JpegQuality}\n"
@@ -168,6 +180,20 @@ def LogRunLocally(
             LogFile.write(Entry)
     except Exception as CaughtError:
         print(f"[warn] local run logging failed: {CaughtError}", file=sys.stderr)
+
+
+def BuildClient(ModelConfig: object, ClientConfig: FClientConfig) -> FFireworksClient:
+    # ModelConfig is an FModelConfig or FJudgeConfig; both share the fields used here.
+    return FFireworksClient(
+        ModelId=ModelConfig.Id,
+        BaseUrl=ModelConfig.BaseUrl,
+        TimeoutSeconds=ClientConfig.TimeoutSeconds,
+        MaxRetries=ClientConfig.MaxRetries,
+        BackoffSeconds=ClientConfig.BackoffSeconds,
+        MaxTokens=ModelConfig.MaxTokens,
+        Temperature=ModelConfig.Temperature,
+        ReasoningEffort=ModelConfig.ReasoningEffort,
+    )
 
 
 def Main() -> int:
@@ -189,17 +215,13 @@ def Main() -> int:
         MaxRetries=Config.Client.MaxRetries,
         BackoffSeconds=Config.Client.BackoffSeconds,
     )
-    Client: FFireworksClient = FFireworksClient(
-        ModelId=Config.Model.Id,
-        BaseUrl=Config.Model.BaseUrl,
-        TimeoutSeconds=Config.Client.TimeoutSeconds,
-        MaxRetries=Config.Client.MaxRetries,
-        BackoffSeconds=Config.Client.BackoffSeconds,
-        MaxTokens=Config.Model.MaxTokens,
-        Temperature=Config.Model.Temperature,
-        ReasoningEffort=Config.Model.ReasoningEffort,
+    Clients: list[FFireworksClient] = [
+        BuildClient(ModelConfig, Config.Client) for ModelConfig in Config.Models
+    ]
+    JudgeClient: FFireworksClient = BuildClient(Config.Judge, Config.Client)
+    Captioner: FCaptioner = FCaptioner(
+        Clients, JudgeClient, Config.Judge.PassFrames, Config.StyleTemperatures
     )
-    Captioner: FCaptioner = FCaptioner(Client, Config.StyleTemperatures)
 
     FramesByTask: dict[str, list[bytes]] = AcquireAllFrames(
         Tasks, Config, Sampler, Downloader

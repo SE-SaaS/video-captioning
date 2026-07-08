@@ -15,6 +15,17 @@ class FModelConfig:
 
 
 @dataclass
+class FJudgeConfig:
+    Provider: str
+    Id: str
+    BaseUrl: str
+    Temperature: float
+    MaxTokens: int
+    ReasoningEffort: str
+    PassFrames: bool
+
+
+@dataclass
 class FFramesConfig:
     PerThirtySeconds: int
     MaxTotal: int
@@ -47,7 +58,8 @@ class FPathsConfig:
 
 @dataclass
 class FConfig:
-    Model: FModelConfig
+    Models: list[FModelConfig]
+    Judge: FJudgeConfig
     Frames: FFramesConfig
     Client: FClientConfig
     Runtime: FRuntimeConfig
@@ -67,7 +79,8 @@ def LoadConfig(ConfigPath: str = "config.yaml") -> FConfig:
         RawConfig: dict = yaml.safe_load(ConfigFile)
 
     return FConfig(
-        Model=FModelConfig(**RawConfig["Model"]),
+        Models=[FModelConfig(**RawModel) for RawModel in RawConfig["Models"]],
+        Judge=FJudgeConfig(**RawConfig["Judge"]),
         Frames=FFramesConfig(**RawConfig["Frames"]),
         Client=FClientConfig(**RawConfig["Client"]),
         Runtime=FRuntimeConfig(**RawConfig["Runtime"]),

@@ -59,3 +59,34 @@ def BuildSystemPrompt(style: str) -> str:
         style_definition=styles_definitions[style],
         examples=Examples,
     )
+
+
+# Judge prompt: used only in ensemble mode. Given several candidate captions (and,
+# optionally, the video frames), the judge outputs ONE final caption per style —
+# either the strongest candidate as-is, or a merge of their best parts.
+judge_system_prompt = """
+You are the judge in a video-captioning ensemble. Several models each wrote a candidate caption for the SAME short video clip, all targeting the "{style}" style. You may also be shown the video frames.
+
+Your job: produce the single BEST final caption in the "{style}" style.
+
+How to decide:
+- Pick the strongest candidate as-is, OR merge the best parts of several into one caption — whichever yields the best result.
+- Accuracy first: the final caption must faithfully reflect what actually happens in the video. If frames are provided, verify against them and never keep details that are not visible. Discard any candidate content that looks invented.
+- Then match the requested tone exactly.
+- One or two sentences. English only.
+- Output ONLY the final caption text — no labels, quotes, ranking, or explanation.
+
+Style = {style}: {style_definition}
+
+Examples of this style:
+{examples}
+"""
+
+
+def BuildJudgeSystemPrompt(style: str) -> str:
+    Examples = "\n".join(f"- {Example}" for Example in few_shot_examples[style])
+    return judge_system_prompt.format(
+        style=style,
+        style_definition=styles_definitions[style],
+        examples=Examples,
+    )
