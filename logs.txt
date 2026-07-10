@@ -1,0 +1,63 @@
+========================================================================================
+ VIDEO CAPTIONING RUN   2026-07-09T20:07:12
+ Mode: single model
+========================================================================================
+ Models:
+   - accounts/fireworks/models/minimax-m3  (temp=0.4, max_tokens=2000, reasoning=medium)
+ Judge:  (disabled — single-model mode)
+ Style temperatures: {'formal': 0.1, 'sarcastic': 0.8, 'humorous_tech': 0.9, 'humorous_non_tech': 0.9}
+ Frames: 7/30s, max 30, width 512px, q85
+
+----------------------------------------------------------------------------------------
+ TASK v1   https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4
+----------------------------------------------------------------------------------------
+  [humorous_non_tech]
+      >> FINAL: A woman is typing away at her keyboard like she means business. Then her screen suddenly goes black, and she immediately pulls out her phone, because the scrolling must go on.
+========================================================================================
+
+
+
+
+
+========================================================================================
+ VIDEO CAPTIONING RUN   2026-07-09T20:06:38
+ Mode: single model
+========================================================================================
+ Models:
+   - accounts/fireworks/models/qwen3p7-plus  (temp=0.4, max_tokens=2000, reasoning=none)
+ Judge:  (disabled — single-model mode)
+ Style temperatures: {'formal': 0.1, 'sarcastic': 0.8, 'humorous_tech': 0.9, 'humorous_non_tech': 0.9}
+ Frames: 7/30s, max 30, width 512px, q85
+
+----------------------------------------------------------------------------------------
+ TASK v1   https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4
+----------------------------------------------------------------------------------------
+  [humorous_non_tech]
+      >> FINAL: A woman typing at her desk suddenly freezes with wide eyes, probably just realizing she sent that email to the wrong person. We've all been there.
+========================================================================================
+
+
+
+
+========================================================================================
+ VIDEO CAPTIONING RUN   2026-07-09T21:33:57
+ Mode: ENSEMBLE
+========================================================================================
+ Models:
+   - accounts/fireworks/models/minimax-m3  (temp=0.4, max_tokens=4000, reasoning=medium)
+   - accounts/fireworks/models/qwen3p7-plus  (temp=0.4, max_tokens=4000, reasoning=medium)
+   - accounts/fireworks/models/kimi-k2p6  (temp=0.4, max_tokens=4000, reasoning=medium)
+ Judge:  accounts/fireworks/models/qwen3p7-plus  (temp=0.3, pass_frames=True)
+ Style temperatures: {'formal': 0.1, 'sarcastic': 0.8, 'humorous_tech': 0.9, 'humorous_non_tech': 0.9}
+ Frames: 7/30s, max 30, width 512px, q85
+
+----------------------------------------------------------------------------------------
+ TASK v1   https://storage.googleapis.com/amd-hackathon-clips/3044693-uhd_3840_2160_24fps.mp4
+----------------------------------------------------------------------------------------
+  [humorous_non_tech]
+      minimax-m3       | A woman types intently at her computer, pausing briefly to give her monitor a very suspicious look.
+      qwen3p7-plus     | She's minding her own business at work until the screen drops some absolute chaos. That wide-eyed look says it all, but she keeps typing like nothing happened.
+      kimi-k2p6        | She’s typing with the energy of someone who just got a “per my last email.” Respect.
+      >> FINAL (judge qwen3p7-plus):
+         She's minding her own business until the screen drops some absolute chaos. That wide-eyed look says it all, but she keeps typing like nothing happened.
+========================================================================================

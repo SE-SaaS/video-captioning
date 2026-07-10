@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 
 from Source.Config import FClientConfig, FConfig, LoadConfig
-from Source.Pipeline.Captioner import FCaptioner
+from Source.Pipeline.Captioner import FCaptioner, FCaptionTrace
 from Source.Pipeline.FireworksClient import FFireworksClient
 from Source.Pipeline.FrameSampler import FFrameSampler
 from Source.Pipeline.VideoDownloader import FVideoDownloader
@@ -86,8 +86,8 @@ def GenerateAllCaptions(
     FramesByTask: dict[str, list[bytes]],
     Config: FConfig,
     Captioner: FCaptioner,
-) -> dict[str, dict[str, str]]:
-    CaptionsByTask: dict[str, dict[str, str]] = {Task.TaskId: {} for Task in Tasks}
+) -> dict[str, dict[str, FCaptionTrace]]:
+    TracesByTask: dict[str, dict[str, FCaptionTrace]] = {Task.TaskId: {} for Task in Tasks}
     with ThreadPoolExecutor(max_workers=Config.Runtime.MaxWorkers) as Executor:
         FutureMap: dict = {}
         for Task in Tasks:
@@ -101,13 +101,22 @@ def GenerateAllCaptions(
         for Future in as_completed(FutureMap):
             TaskId, StyleValue = FutureMap[Future]
             try:
-                CaptionsByTask[TaskId][StyleValue] = Future.result()
+                TracesByTask[TaskId][StyleValue] = Future.result()
             except Exception as CaughtError:
                 print(
                     f"[warn] caption failed {TaskId}/{StyleValue}: {CaughtError}",
                     file=sys.stderr,
                 )
-    return CaptionsByTask
+    return TracesByTask
+
+
+def CaptionsFromTraces(
+    TracesByTask: dict[str, dict[str, FCaptionTrace]],
+) -> dict[str, dict[str, str]]:
+    return {
+        TaskId: {Style: Trace.FinalCaption for Style, Trace in StyleTraces.items()}
+        for TaskId, StyleTraces in TracesByTask.items()
+    }
 
 
 def BuildResults(
@@ -126,58 +135,78 @@ def BuildResults(
     return Results
 
 
-# Local-only test log: append model config + input/output to a repo txt file for
-# review. Best-effort and fully guarded so it can never affect the graded Docker run.
 LocalLogPath: str = "local_test_log.txt"
+ReportWidth: int = 88
 
 
-def LogRunLocally(
+def FormatRunReport(
     Config: FConfig,
     Tasks: list[FVideoTask],
-    Results: list[FCaptionResult],
-) -> None:
+    TracesByTask: dict[str, dict[str, FCaptionTrace]],
+) -> str:
+    bEnsemble: bool = len(Config.Models) > 1
+    Bar: str = "=" * ReportWidth
+    Rule: str = "-" * ReportWidth
+    Lines: list[str] = []
+
+    # Header: run metadata.
+    Lines.append(Bar)
+    Lines.append(f" VIDEO CAPTIONING RUN   {datetime.now().isoformat(timespec='seconds')}")
+    Lines.append(f" Mode: {'ENSEMBLE' if bEnsemble else 'single model'}")
+    Lines.append(Bar)
+    Lines.append(" Models:")
+    for ModelConfig in Config.Models:
+        Lines.append(
+            f"   - {ModelConfig.Id}"
+            f"  (temp={ModelConfig.Temperature}, max_tokens={ModelConfig.MaxTokens},"
+            f" reasoning={ModelConfig.ReasoningEffort})"
+        )
+    if bEnsemble:
+        Lines.append(
+            f" Judge:  {Config.Judge.Id}"
+            f"  (temp={Config.Judge.Temperature}, pass_frames={Config.Judge.PassFrames})"
+        )
+    else:
+        Lines.append(" Judge:  (disabled — single-model mode)")
+    Lines.append(f" Style temperatures: {Config.StyleTemperatures}")
+    Lines.append(
+        f" Frames: {Config.Frames.PerThirtySeconds}/30s, max {Config.Frames.MaxTotal},"
+        f" width {Config.Frames.Width}px, q{Config.Frames.JpegQuality}"
+    )
+
+    # Body: one block per task, each style showing candidates then the final caption.
+    for Task in Tasks:
+        Lines.append("")
+        Lines.append(Rule)
+        Lines.append(f" TASK {Task.TaskId}   {Task.VideoUrl}")
+        Lines.append(Rule)
+        StyleTraces: dict[str, FCaptionTrace] = TracesByTask.get(Task.TaskId, {})
+        for Style in Task.Styles:
+            Trace: FCaptionTrace | None = StyleTraces.get(Style.value)
+            Lines.append(f"  [{Style.value}]")
+            if Trace is None:
+                Lines.append(f"      (failed - using fallback: \"{FallbackCaption}\")")
+                continue
+            if Trace.JudgeModelId is not None:
+                for ModelId, Caption in Trace.Candidates:
+                    ShortId: str = ModelId.rsplit("/", 1)[-1]
+                    Lines.append(f"      {ShortId:<16} | {Caption}")
+                Lines.append(f"      >> FINAL (judge {Trace.JudgeModelId.rsplit('/', 1)[-1]}):")
+                Lines.append(f"         {Trace.FinalCaption}")
+            else:
+                Lines.append(f"      >> FINAL: {Trace.FinalCaption}")
+    Lines.append(Bar)
+    return "\n".join(Lines)
+
+
+# Best-effort local log: append the run report to a repo txt file. Fully guarded and
+# skipped inside Docker so it can never affect the graded run.
+def LogRunLocally(Report: str) -> None:
     if os.path.exists("/.dockerenv"):
-        return  # Docker (grading) run — never log.
+        return
     try:
-        InputPayload: list[dict] = [
-            {
-                "task_id": Task.TaskId,
-                "video_url": Task.VideoUrl,
-                "styles": [Style.value for Style in Task.Styles],
-            }
-            for Task in Tasks
-        ]
-        OutputPayload: list[dict] = [
-            {"task_id": Result.TaskId, "captions": Result.Captions} for Result in Results
-        ]
-        bEnsemble: bool = len(Config.Models) > 1
-        ModelsSummary: str = "\n".join(
-            f"  - {ModelConfig.Id} (temp={ModelConfig.Temperature}, "
-            f"max_tokens={ModelConfig.MaxTokens}, reasoning={ModelConfig.ReasoningEffort})"
-            for ModelConfig in Config.Models
-        )
-        JudgeSummary: str = (
-            f"  {Config.Judge.Id} (temp={Config.Judge.Temperature}, "
-            f"max_tokens={Config.Judge.MaxTokens}, reasoning={Config.Judge.ReasoningEffort}, "
-            f"pass_frames={Config.Judge.PassFrames})"
-            if bEnsemble
-            else "  (disabled — single-model mode)"
-        )
-        Entry: str = (
-            f"\n{'=' * 80}\n"
-            f"Timestamp:       {datetime.now().isoformat(timespec='seconds')}\n"
-            f"Mode:            {'ensemble' if bEnsemble else 'single-model'}\n"
-            f"Models:\n{ModelsSummary}\n"
-            f"Judge:\n{JudgeSummary}\n"
-            f"StyleTemperatures: {Config.StyleTemperatures}\n"
-            f"Frames:          PerThirtySeconds={Config.Frames.PerThirtySeconds}, "
-            f"MaxTotal={Config.Frames.MaxTotal}, Width={Config.Frames.Width}, "
-            f"JpegQuality={Config.Frames.JpegQuality}\n"
-            f"Input:\n{json.dumps(InputPayload, ensure_ascii=False, indent=2)}\n"
-            f"Output:\n{json.dumps(OutputPayload, ensure_ascii=False, indent=2)}\n"
-        )
         with open(LocalLogPath, "a", encoding="utf-8") as LogFile:
-            LogFile.write(Entry)
+            LogFile.write("\n" + Report + "\n")
     except Exception as CaughtError:
         print(f"[warn] local run logging failed: {CaughtError}", file=sys.stderr)
 
@@ -235,17 +264,16 @@ def Main() -> int:
     FramesByTask: dict[str, list[bytes]] = AcquireAllFrames(
         Tasks, Config, Sampler, Downloader
     )
-    CaptionsByTask: dict[str, dict[str, str]] = GenerateAllCaptions(
+    TracesByTask: dict[str, dict[str, FCaptionTrace]] = GenerateAllCaptions(
         Tasks, FramesByTask, Config, Captioner
     )
-    Results: list[FCaptionResult] = BuildResults(Tasks, CaptionsByTask)
+    Results: list[FCaptionResult] = BuildResults(Tasks, CaptionsFromTraces(TracesByTask))
     WriteResults(Config.Paths.Output, Results)
-    LogRunLocally(Config, Tasks, Results)
 
-    OutputPayload: list[dict] = [
-        {"task_id": Result.TaskId, "captions": Result.Captions} for Result in Results
-    ]
-    print(json.dumps(OutputPayload, ensure_ascii=False, indent=2))
+    # Nice structured record: same report goes to the terminal and the local log.
+    Report: str = FormatRunReport(Config, Tasks, TracesByTask)
+    print(Report)
+    LogRunLocally(Report)
     return 0
 
 

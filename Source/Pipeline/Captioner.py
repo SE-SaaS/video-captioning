@@ -1,9 +1,19 @@
 # Captioner: generates a caption per style. Single-model mode uses the one model
 # directly; ensemble mode (2+ models) collects each model's candidate caption and
 # hands them to a judge model that returns the final caption.
+from dataclasses import dataclass
+
 from Source.Pipeline.FireworksClient import FFireworksClient
 from Source.Pipeline.SystemPrompt import BuildJudgeSystemPrompt, BuildSystemPrompt
 from Source.Schema.Models import ECaptionStyle
+
+
+@dataclass
+class FCaptionTrace:
+    Style: str
+    Candidates: list[tuple[str, str]]  # (model_id, candidate_caption) per ensemble member
+    FinalCaption: str
+    JudgeModelId: str | None = None    # None in single-model mode
 
 
 class FCaptioner:
@@ -19,22 +29,27 @@ class FCaptioner:
         self.JudgePassFrames: bool = JudgePassFrames
         self.StyleTemperatures: dict[str, float] = StyleTemperatures
 
-    def GenerateCaption(self, Frames: list[bytes], Style: ECaptionStyle) -> str:
+    def GenerateCaption(self, Frames: list[bytes], Style: ECaptionStyle) -> FCaptionTrace:
         SystemPrompt: str = BuildSystemPrompt(Style.value)
         UserPrompt: str = "Caption this video."
         # Fall back to each client's default temperature if the style is unlisted.
         Temperature: float | None = self.StyleTemperatures.get(Style.value)
 
-        Candidates: list[str] = [
-            Client.Complete(SystemPrompt, UserPrompt, Frames, Temperature)
+        Candidates: list[tuple[str, str]] = [
+            (Client.ModelId, Client.Complete(SystemPrompt, UserPrompt, Frames, Temperature))
             for Client in self.Clients
         ]
 
-        # Single-model mode: no judge, return the only caption.
+        # Single-model mode: no judge, the only caption is final.
         if len(Candidates) == 1:
-            return Candidates[0]
+            return FCaptionTrace(Style.value, Candidates, Candidates[0][1])
 
-        return self.JudgeCaptions(Frames, Style, Candidates)
+        FinalCaption: str = self.JudgeCaptions(
+            Frames, Style, [Caption for _, Caption in Candidates]
+        )
+        return FCaptionTrace(
+            Style.value, Candidates, FinalCaption, self.JudgeClient.ModelId
+        )
 
     def JudgeCaptions(
         self,

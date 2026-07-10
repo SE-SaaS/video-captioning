@@ -3,12 +3,24 @@
 # Candidate caption models. ONE entry -> single-model mode (no judge). TWO OR MORE
 # entries -> ensemble: every model captions each style, then Judge produces the final one.
 Models:
-  - Provider: google
-    Id: "gemini-3.5-flash"
-    BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
+  - Provider: fireworks
+    Id: "accounts/fireworks/models/minimax-m3"
+    BaseUrl: "https://api.fireworks.ai/inference/v1"
     Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
-    MaxTokens: 2000
-    ReasoningEffort: none    # none | low | medium | high
+    MaxTokens: 4000
+    ReasoningEffort: medium    # none | low | medium | high
+  - Provider: fireworks
+    Id: "accounts/fireworks/models/qwen3p7-plus"
+    BaseUrl: "https://api.fireworks.ai/inference/v1"
+    Temperature: 0.4
+    MaxTokens: 4000
+    ReasoningEffort: medium
+  - Provider: fireworks
+    Id: "accounts/fireworks/models/kimi-k2p6"
+    BaseUrl: "https://api.fireworks.ai/inference/v1"
+    Temperature: 0.4
+    MaxTokens: 4000
+    ReasoningEffort: medium
   # Add more models here to enable ensembling. The API key env var is derived from
   # Provider (fireworks -> FIREWORKS_API_KEY, google -> GEMINI_API_KEY). Gemini works
   # through its OpenAI-compatible endpoint:
@@ -23,11 +35,11 @@ Models:
 # or merges their best parts into one final caption per style.
 Judge:
   Provider: fireworks
-  Id: "accounts/fireworks/models/minimax-m3"
+  Id: "accounts/fireworks/models/qwen3p7-plus"
   BaseUrl: "https://api.fireworks.ai/inference/v1"
   Temperature: 0.3
-  MaxTokens: 2000
-  ReasoningEffort: none
+  MaxTokens: 4000
+  ReasoningEffort: medium
   PassFrames: true           # true = also send the video frames to the judge; false = captions only
 
 # Per-style sampling temperature: low = precise/factual, high = creative/varied.
