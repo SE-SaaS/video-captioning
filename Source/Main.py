@@ -64,6 +64,7 @@ def AcquireAllFrames(
     Config: FConfig,
     Sampler: FFrameSampler,
     Downloader: FVideoDownloader,
+    OnProgress: object = None,
 ) -> dict[str, list[bytes]]:
     FramesByTask: dict[str, list[bytes]] = {}
     with ThreadPoolExecutor(max_workers=Config.Runtime.MaxWorkers) as Executor:
@@ -71,6 +72,8 @@ def AcquireAllFrames(
             Executor.submit(AcquireFrames, Task, Config, Sampler, Downloader): Task
             for Task in Tasks
         }
+        Done: int = 0
+        Total: int = len(FutureMap)
         for Future in as_completed(FutureMap):
             Task: FVideoTask = FutureMap[Future]
             try:
@@ -78,6 +81,9 @@ def AcquireAllFrames(
             except Exception as CaughtError:
                 print(f"[warn] {CaughtError}", file=sys.stderr)
                 FramesByTask[Task.TaskId] = []
+            Done += 1
+            if OnProgress is not None:
+                OnProgress(Done, Total, Task.TaskId)
     return FramesByTask
 
 
@@ -86,6 +92,7 @@ def GenerateAllCaptions(
     FramesByTask: dict[str, list[bytes]],
     Config: FConfig,
     Captioner: FCaptioner,
+    OnProgress: object = None,
 ) -> dict[str, dict[str, FCaptionTrace]]:
     TracesByTask: dict[str, dict[str, FCaptionTrace]] = {Task.TaskId: {} for Task in Tasks}
     with ThreadPoolExecutor(max_workers=Config.Runtime.MaxWorkers) as Executor:
@@ -98,6 +105,8 @@ def GenerateAllCaptions(
                 Future = Executor.submit(Captioner.GenerateCaption, Frames, Style)
                 FutureMap[Future] = (Task.TaskId, Style.value)
 
+        Done: int = 0
+        Total: int = len(FutureMap)
         for Future in as_completed(FutureMap):
             TaskId, StyleValue = FutureMap[Future]
             try:
@@ -107,6 +116,9 @@ def GenerateAllCaptions(
                     f"[warn] caption failed {TaskId}/{StyleValue}: {CaughtError}",
                     file=sys.stderr,
                 )
+            Done += 1
+            if OnProgress is not None:
+                OnProgress(Done, Total, f"{TaskId}/{StyleValue}")
     return TracesByTask
 
 

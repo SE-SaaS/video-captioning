@@ -1,0 +1,18 @@
+[
+  { "task_id": "nature_1",   "video_url": "TestVideos/nature_1.mp4",   "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "nature_2",   "video_url": "TestVideos/nature_2.mp4",   "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "urban_1",    "video_url": "TestVideos/urban_1.mp4",    "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "urban_2",    "video_url": "TestVideos/urban_2.mp4",    "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "animals_1",  "video_url": "TestVideos/animals_1.mp4",  "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "animals_2",  "video_url": "TestVideos/animals_2.mp4",  "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "people_1",   "video_url": "TestVideos/people_1.mp4",   "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "people_2",   "video_url": "TestVideos/people_2.mp4",   "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "sports_1",   "video_url": "TestVideos/sports_1.mp4",   "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "sports_2",   "video_url": "TestVideos/sports_2.mp4",   "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "food_1",     "video_url": "TestVideos/food_1.mp4",     "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "food_2",     "video_url": "TestVideos/food_2.mp4",     "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "weather_1",  "video_url": "TestVideos/weather_1.mp4",  "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "weather_2",  "video_url": "TestVideos/weather_2.mp4",  "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "tech_1",     "video_url": "TestVideos/tech_1.mp4",     "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] },
+  { "task_id": "tech_2",     "video_url": "TestVideos/tech_2.mp4",     "styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"] }
+]

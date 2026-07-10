@@ -90,3 +90,29 @@ def BuildJudgeSystemPrompt(style: str) -> str:
         style_definition=styles_definitions[style],
         examples=Examples,
     )
+
+
+# Scorer prompt: used only by the local test harness (Testing/). Given the video frames
+# and one final caption, it rates the caption on two independent 0-1 dimensions, mirroring
+# the hackathon's LLM-judge rubric (accuracy + style match). Output is strict JSON.
+scorer_system_prompt = """
+You are a strict evaluator for a video-captioning system. You are shown frames sampled in chronological order from a single short video clip, and ONE caption written for that clip in the "{style}" style.
+
+Rate the caption on two INDEPENDENT dimensions, each a continuous value from 0.0 to 1.0:
+1. accuracy — how faithfully the caption reflects what actually happens in the video (real subjects, actions, setting). Penalize invented, missing, or wrong details. 1.0 = fully faithful, 0.0 = unrelated or fabricated.
+2. style_match — how well the caption matches the requested "{style}" tone. 1.0 = perfectly on-tone, 0.0 = wrong tone.
+
+Style = {style}: {style_definition}
+
+Judge the two dimensions separately — a caption can be accurate but off-tone, or on-tone but inaccurate. Use the full range and be discerning (e.g. 0.73, 0.91), not just round numbers.
+
+Output ONLY a JSON object and nothing else:
+{{"accuracy": <float 0-1>, "style_match": <float 0-1>}}
+"""
+
+
+def BuildScorerSystemPrompt(style: str) -> str:
+    return scorer_system_prompt.format(
+        style=style,
+        style_definition=styles_definitions[style],
+    )

@@ -1,0 +1,26 @@
+# Config for the LOCAL test harness only (Testing/run_tests.py).
+# The captioning pipeline itself uses the root config.yaml; this file configures just
+# the scorer LLM, the score weighting, and where the test reads/writes its files.
+
+# Scorer LLM: rates each final caption on accuracy + style_match (0-1 each).
+Scorer:
+  Provider: fireworks
+  Id: "accounts/fireworks/models/qwen3p7-plus"
+  BaseUrl: "https://api.fireworks.ai/inference/v1"
+  Temperature: 0.0         # deterministic scoring
+  MaxTokens: 1000
+  ReasoningEffort: none
+  PassFrames: true         # scorer needs the video frames to judge accuracy
+
+# Weights for combining the two dimensions into a per-caption score (should sum to 1).
+Weights:
+  Accuracy: 0.5
+  StyleMatch: 0.5
+
+# Paths are relative to the repo root (the harness chdirs there before running).
+# ReportText is APPENDED to (one summary block per run); ReportJson is overwritten
+# with the latest run's full detail.
+Paths:
+  Tasks: "Testing/tasks.json"
+  ReportJson: "Testing/test_results.json"
+  ReportText: "Testing/test_results.txt"
