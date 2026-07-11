@@ -1,39 +1,18 @@
 {
-  "timestamp": "2026-07-11T14:43:38",
-  "elapsed_seconds": 2092.5,
+  "timestamp": "2026-07-11T15:40:07",
+  "elapsed_seconds": 848.2,
   "config": {
-    "mode": "ensemble",
+    "mode": "single-model",
     "models": [
-      {
-        "provider": "fireworks",
-        "id": "accounts/fireworks/models/minimax-m3",
-        "temperature": 0.4,
-        "max_tokens": 4000,
-        "reasoning_effort": "none"
-      },
       {
         "provider": "fireworks",
         "id": "accounts/fireworks/models/qwen3p7-plus",
         "temperature": 0.4,
         "max_tokens": 4000,
         "reasoning_effort": "none"
-      },
-      {
-        "provider": "fireworks",
-        "id": "accounts/fireworks/models/kimi-k2p6",
-        "temperature": 0.4,
-        "max_tokens": 4000,
-        "reasoning_effort": "none"
       }
     ],
-    "judge": {
-      "provider": "fireworks",
-      "id": "accounts/fireworks/models/qwen3p7-plus",
-      "temperature": 0.3,
-      "max_tokens": 4000,
-      "reasoning_effort": "none",
-      "pass_frames": true
-    },
+    "judge": null,
     "style_temperatures": {
       "formal": 0.1,
       "sarcastic": 0.8,
@@ -62,75 +41,67 @@
     }
   },
   "overall": {
-    "accuracy": 0.96734375,
-    "style_match": 0.9896874999999999,
-    "score": 0.978515625
+    "accuracy": 0.95546875,
+    "style_match": 0.98671875,
+    "score": 0.97109375
   },
   "per_style": {
     "formal": {
-      "accuracy": 0.985625,
+      "accuracy": 0.978125,
       "style_match": 1.0,
-      "score": 0.9928125,
+      "score": 0.9890625,
       "n": 16
     },
     "sarcastic": {
-      "accuracy": 0.975,
-      "style_match": 0.980625,
-      "score": 0.9778125,
+      "accuracy": 0.93375,
+      "style_match": 0.97625,
+      "score": 0.955,
       "n": 16
     },
     "humorous_tech": {
-      "accuracy": 0.9518749999999999,
-      "style_match": 0.98625,
-      "score": 0.9690624999999999,
+      "accuracy": 0.955625,
+      "style_match": 0.986875,
+      "score": 0.97125,
       "n": 16
     },
     "humorous_non_tech": {
-      "accuracy": 0.9568749999999999,
-      "style_match": 0.991875,
-      "score": 0.974375,
+      "accuracy": 0.954375,
+      "style_match": 0.98375,
+      "score": 0.9690624999999999,
       "n": 16
     }
   },
   "per_clip": {
-    "animals_1": 0.965,
-    "animals_2": 0.9724999999999999,
-    "food_1": 0.97125,
-    "food_2": 0.9724999999999999,
-    "nature_1": 0.99,
-    "nature_2": 0.96375,
+    "animals_1": 0.96875,
+    "animals_2": 0.97125,
+    "food_1": 0.97875,
+    "food_2": 0.96625,
+    "nature_1": 0.99625,
+    "nature_2": 0.965,
     "people_1": 0.9875,
-    "people_2": 0.97375,
-    "sports_1": 0.97875,
-    "sports_2": 0.9875,
-    "tech_1": 0.985,
-    "tech_2": 0.985,
-    "urban_1": 0.97875,
-    "urban_2": 0.97625,
-    "weather_1": 0.98875,
-    "weather_2": 0.98
+    "people_2": 0.975,
+    "sports_1": 0.895,
+    "sports_2": 0.9724999999999999,
+    "tech_1": 0.9775,
+    "tech_2": 0.975,
+    "urban_1": 0.9824999999999999,
+    "urban_2": 0.98125,
+    "weather_1": 0.9675,
+    "weather_2": 0.9775
   },
   "records": [
     {
       "task_id": "nature_1",
       "video_url": "TestVideos/nature_1.mp4",
       "style": "formal",
-      "caption": "An aerial top-down view captures turquoise ocean waves continuously crashing against a large, dark rock formation, with white sea foam spreading across the stone and swirling in the surrounding water.",
+      "caption": "An aerial top-down view captures turquoise ocean waves continuously crashing against and washing over a large, dark rock formation. The white sea foam swirls around the rugged stone as the water recedes and surges in a rhythmic pattern.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Ocean waves continuously break against a dark rocky outcrop, viewed from directly above as white foam churns around the stone in turquoise water."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "An aerial top-down view captures turquoise ocean waves continuously crashing against a large, dark rock formation. The white sea foam spreads across the rock's surface and swirls in the surrounding water as the tide moves."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "An aerial view captures waves breaking over a rocky outcrop in turquoise coastal waters. The sequence shows white foam swirling around the dark rock formation as the water moves with the changing tide."
+          "caption": "An aerial top-down view captures turquoise ocean waves continuously crashing against and washing over a large, dark rock formation. The white sea foam swirls around the rugged stone as the water recedes and surges in a rhythmic pattern."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -139,46 +110,30 @@
       "task_id": "nature_1",
       "video_url": "TestVideos/nature_1.mp4",
       "style": "sarcastic",
-      "caption": "An aerial view of waves crashing against a rock, because apparently we needed a drone to confirm that water still goes splash.",
+      "caption": "Waves crash against a rock in an aerial shot, because apparently watching water hit stone is the peak of cinematic storytelling. Truly groundbreaking stuff.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Ocean waves crash against rocks from above. Groundbreaking cinematography, really pushing the boundaries of... gravity."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Waves crash against a rock repeatedly. Truly, the ocean's most groundbreaking performance art."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "An aerial view shows waves crashing against a rocky island. Because apparently we needed a drone to confirm that water still goes splash."
+          "caption": "Waves crash against a rock in an aerial shot, because apparently watching water hit stone is the peak of cinematic storytelling. Truly groundbreaking stuff."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
-      "style_match": 0.95,
-      "score": 0.975
+      "style_match": 1.0,
+      "score": 1.0
     },
     {
       "task_id": "nature_1",
       "video_url": "TestVideos/nature_1.mp4",
       "style": "humorous_tech",
-      "caption": "Ocean waves execute a relentless DDoS attack on the rock, but the legacy hardware maintains 100% uptime with zero downtime scheduled.",
+      "caption": "The ocean runs a brute-force DDoS attack on the rock, but the legacy hardware refuses to go offline.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Ocean waves keep pinging that rock — looks like an infinite loop with no timeout. Classic DDoS attack on geology."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The ocean runs an infinite loop of DDoS attacks against the rock, but the legacy hardware refuses to go offline."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Ocean waves attempt a brute-force DDoS on a stubborn rock cluster — uptime remains at 100%, patches still pending."
+          "caption": "The ocean runs a brute-force DDoS attack on the rock, but the legacy hardware refuses to go offline."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.98,
       "style_match": 0.99,
       "score": 0.985
@@ -187,22 +142,14 @@
       "task_id": "nature_1",
       "video_url": "TestVideos/nature_1.mp4",
       "style": "humorous_non_tech",
-      "caption": "The ocean slapping the same rock forever. Someone hold a grudge like that.",
+      "caption": "The ocean throwing a tantrum against a rock that refuses to move. Stubbornness level: geological.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "The ocean slapping the same rock forever. Someone hold a grudge like that."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The ocean relentlessly hugs a rock like an overexcited puppy that just discovered water. That rock is probably questioning every life choice that led to this moment."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The ocean really said \"you're not getting past me\" to this poor rock. Held that grudge for centuries and still going strong."
+          "caption": "The ocean throwing a tantrum against a rock that refuses to move. Stubbornness level: geological."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -214,67 +161,27 @@
       "caption": "An aerial panoramic view captures a large reservoir surrounded by dense pine forests and distant mountains, revealing a recreational area with a parking lot and playground nestled among the trees along the shoreline.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "An aerial camera pans across a forested landscape, revealing a calm lake bordered by pine trees, a small parking area, and distant mountains under an overcast sky."
-        },
-        {
           "model": "qwen3p7-plus",
           "caption": "An aerial panoramic view captures a large reservoir surrounded by dense pine forests and distant mountains, revealing a recreational area with a parking lot and playground nestled among the trees along the shoreline."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "An aerial view captures a sweeping panorama of a large reservoir bordered by forested hills and distant mountains, with the camera rotating to reveal winding shorelines, small islands, and a sunlit path cutting through dense green woodland before panning across the calm reflective water to display varied terrain including rocky peninsulas, a small parking area, and scattered structures along the water's edge."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.96,
+      "judge_model": null,
+      "accuracy": 0.95,
       "style_match": 1.0,
-      "score": 0.98
+      "score": 0.975
     },
     {
       "task_id": "nature_2",
       "video_url": "TestVideos/nature_2.mp4",
       "style": "sarcastic",
-      "caption": "A drone pans 360 degrees over a lake and some trees, proving that if you spin in a circle long enough, it’s just more water and dirt. Truly groundbreaking cinematography.",
+      "caption": "A drone spins in a slow, majestic circle over a lake and some trees, proving once again that nature is just a giant screensaver waiting to be admired.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A drone slowly pans across a serene lake surrounded by pine trees and mountains, revealing absolutely nothing of consequence—just nature doing its thing, as if we've never seen water and trees before."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A drone pans 360 degrees over a lake and some trees, proving that if you spin in a circle long enough, it’s just more water and dirt. Truly groundbreaking cinematography."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A drone slowly pans over a lake and some trees. Absolutely groundbreaking cinematography, truly."
+          "caption": "A drone spins in a slow, majestic circle over a lake and some trees, proving once again that nature is just a giant screensaver waiting to be admired."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 0.98,
-      "score": 0.965
-    },
-    {
-      "task_id": "nature_2",
-      "video_url": "TestVideos/nature_2.mp4",
-      "style": "humorous_tech",
-      "caption": "The drone executes a flawless 360° pan, rendering the lake's mirror reflection with zero latency and perfect symmetry.",
-      "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "The lake is running an infinite `mirror.reflect()` loop with zero CPU usage — nature's most elegant no-op."
-        },
-        {
-          "model": "qwen3p7-plus",
-          "caption": "The drone executes a perfect 360-degree pan over the lake, rendering the scenery with zero latency and maximum resolution."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The camera drone executes a full 360° render loop over the reservoir, buffering terrain data from every angle before committing to disk."
-        }
-      ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 0.92,
       "score": 0.935
@@ -282,23 +189,31 @@
     {
       "task_id": "nature_2",
       "video_url": "TestVideos/nature_2.mp4",
-      "style": "humorous_non_tech",
-      "caption": "The camera does a full 360 spin like it’s looking for its keys, while the lake just sits there smooth as a freshly ironed shirt. Nature really said, \"Let me fix your hair for you.\"",
+      "style": "humorous_tech",
+      "caption": "The drone executes a perfect 360-degree pan over the lake, rendering the scenery with zero latency and infinite draw distance.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "The lake is showing off its mirror skills again, and the mountains are absolutely loving it."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The lake is so calm it's basically a giant mirror showing off the sky's reflection. Nature really said, \"Let me fix your hair for you.\""
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "This camera’s doing a full 360 spin like it’s trying to find where it left its keys. Meanwhile the lake’s just sitting there, smooth as a freshly ironed shirt, showing off."
+          "caption": "The drone executes a perfect 360-degree pan over the lake, rendering the scenery with zero latency and infinite draw distance."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
+      "accuracy": 0.95,
+      "style_match": 1.0,
+      "score": 0.975
+    },
+    {
+      "task_id": "nature_2",
+      "video_url": "TestVideos/nature_2.mp4",
+      "style": "humorous_non_tech",
+      "caption": "The camera does a full 360-spin to show off a lake so still it's basically a giant mirror for the clouds. Nature really said, 'Let me fix my hair real quick,' and created the perfect reflection.",
+      "candidates": [
+        {
+          "model": "qwen3p7-plus",
+          "caption": "The camera does a full 360-spin to show off a lake so still it's basically a giant mirror for the clouds. Nature really said, 'Let me fix my hair real quick,' and created the perfect reflection."
+        }
+      ],
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -307,22 +222,14 @@
       "task_id": "urban_1",
       "video_url": "TestVideos/urban_1.mp4",
       "style": "formal",
-      "caption": "A time-lapse captures dense vehicular traffic flowing through a multi-lane urban intersection at night, characterized by streaking light trails from moving vehicles and illuminated commercial signage lining the roadway.",
+      "caption": "A time-lapse sequence captures heavy vehicular traffic flowing along a multi-lane urban arterial road at night, with illuminated commercial signage and city buildings visible in the background.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A time-lapse captures heavy vehicular traffic flowing through a multi-lane urban intersection at night, with illuminated commercial signage and streetlights lining the roadway."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A time-lapse sequence captures heavy vehicular traffic flowing through a multi-lane urban intersection at night, with illuminated signage and light trails from moving vehicles defining the scene."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A time-lapse captures dense vehicular traffic flowing through a multi-lane urban thoroughfare at night, with streaking headlights and taillights illuminating the commercial district lined with illuminated signage and buildings."
+          "caption": "A time-lapse sequence captures heavy vehicular traffic flowing along a multi-lane urban arterial road at night, with illuminated commercial signage and city buildings visible in the background."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -331,22 +238,14 @@
       "task_id": "urban_1",
       "video_url": "TestVideos/urban_1.mp4",
       "style": "sarcastic",
-      "caption": "Ah yes, a time-lapse of city traffic, because watching cars blur into streaks of light is clearly the peak of cinematic storytelling.",
+      "caption": "A time-lapse of city traffic at night, because watching cars blur past in an endless loop of congestion is truly the pinnacle of modern entertainment.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Oh look, cars are sitting in traffic at night. Groundbreaking stuff, truly."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Ah yes, a time-lapse of city traffic, because watching cars blur into streaks of light is clearly the peak of cinematic storytelling. Truly, a breathtaking display of urban efficiency and human progress."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Cars zoom through a bustling city at night in a time-lapse. Because nothing says \"thrilling entertainment\" like watching people sit in traffic really fast."
+          "caption": "A time-lapse of city traffic at night, because watching cars blur past in an endless loop of congestion is truly the pinnacle of modern entertainment."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -355,46 +254,30 @@
       "task_id": "urban_1",
       "video_url": "TestVideos/urban_1.mp4",
       "style": "humorous_tech",
-      "caption": "City traffic runs on legacy code with zero optimization, causing a massive memory leak in the right lane while the left thread executes at warp speed.",
+      "caption": "City traffic runs on a legacy message queue with zero load balancing, resulting in massive packet loss on the right lane while the left executes a flawless async stream.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Downtown traffic running on legacy spaghetti code — no refactor, just vibes."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "City traffic runs on legacy code with zero optimization, causing a massive memory leak in the right lane while the left thread executes at warp speed."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The highway is running a distributed denial-of-service attack on itself and somehow still maintaining 99.9% uptime. Classic legacy infrastructure."
+          "caption": "City traffic runs on a legacy message queue with zero load balancing, resulting in massive packet loss on the right lane while the left executes a flawless async stream."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.92,
+      "judge_model": null,
+      "accuracy": 0.95,
       "style_match": 0.98,
-      "score": 0.95
+      "score": 0.965
     },
     {
       "task_id": "urban_1",
       "video_url": "TestVideos/urban_1.mp4",
       "style": "humorous_non_tech",
-      "caption": "Every driver here is convinced their lane is the fast one. Spoiler: it’s just a very bright, very slow parking lot.",
+      "caption": "City traffic moving at light speed while the other lane is just a parking lot with extra steps. The universal commute experience, beautifully blurred.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A massive traffic jam at night, where every driver is clearly in a hurry to be exactly nowhere."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "City traffic moving at lightspeed while the other lane remembers it has a soul. The universal commute experience in a nutshell."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Every single one of these cars thinks their lane is faster. Buddy, it's all the same parking lot."
+          "caption": "City traffic moving at light speed while the other lane is just a parking lot with extra steps. The universal commute experience, beautifully blurred."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 0.98,
       "score": 0.965
@@ -406,19 +289,11 @@
       "caption": "A high-angle view captures dense vehicular congestion on a multi-lane urban avenue flanked by tall brick and stone buildings under an overcast sky.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Heavy vehicular traffic moves along a multi-lane urban thoroughfare flanked by tall residential and commercial buildings under an overcast sky."
-        },
-        {
           "model": "qwen3p7-plus",
           "caption": "A high-angle view captures dense vehicular congestion on a multi-lane urban avenue flanked by tall brick and stone buildings under an overcast sky."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Heavy traffic moves slowly along a multi-lane urban avenue flanked by tall buildings under an overcast sky."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -427,22 +302,30 @@
       "task_id": "urban_2",
       "video_url": "TestVideos/urban_2.mp4",
       "style": "sarcastic",
-      "caption": "A New York City street sits completely gridlocked under a moody gray sky. Truly a groundbreaking display of urban innovation—nothing says \"progress\" like thousands of vehicles going absolutely nowhere.",
+      "caption": "Ah yes, the thrilling spectacle of gridlock, where thousands of vehicles collectively agree to go absolutely nowhere. Truly the pinnacle of modern urban efficiency.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A New York City street sits completely gridlocked with cars and trucks under a moody gray sky. Truly a groundbreaking display of urban innovation — nothing says \"progress\" like thousands of vehicles going absolutely nowhere."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Ah, yes, the thrilling spectacle of gridlocked traffic under a gray sky, truly the urban paradise we were all promised."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A city street packed with cars barely moves under a gray sky. Truly, urban living at its most exhilarating."
+          "caption": "Ah yes, the thrilling spectacle of gridlock, where thousands of vehicles collectively agree to go absolutely nowhere. Truly the pinnacle of modern urban efficiency."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
+      "accuracy": 0.98,
+      "style_match": 0.99,
+      "score": 0.985
+    },
+    {
+      "task_id": "urban_2",
+      "video_url": "TestVideos/urban_2.mp4",
+      "style": "humorous_tech",
+      "caption": "City traffic experiencing a total deadlock—looks like someone forgot to implement a timeout on this blocking I/O operation.",
+      "candidates": [
+        {
+          "model": "qwen3p7-plus",
+          "caption": "City traffic experiencing a total deadlock—looks like someone forgot to implement a timeout on this blocking I/O operation."
+        }
+      ],
+      "judge_model": null,
       "accuracy": 0.98,
       "style_match": 0.95,
       "score": 0.965
@@ -450,47 +333,47 @@
     {
       "task_id": "urban_2",
       "video_url": "TestVideos/urban_2.mp4",
-      "style": "humorous_tech",
-      "caption": "A New York traffic jam where every car is a thread stuck in deadlock, and nobody called sem_post().",
+      "style": "humorous_non_tech",
+      "caption": "A sea of trucks and taxis packed into the city street, moving with the speed of a sleepy sloth. Someone really needs to invent a flying car already.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A New York traffic jam — every car a thread stuck in deadlock, and nobody called sem_post()."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "City traffic experiencing a total deadlock—looks like someone forgot to implement a garbage collector for all these idle threads."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Traffic on a busy city street moves slower than a recursive Fibonacci calculation with no memoization."
+          "caption": "A sea of trucks and taxis packed into the city street, moving with the speed of a sleepy sloth. Someone really needs to invent a flying car already."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
     },
     {
-      "task_id": "urban_2",
-      "video_url": "TestVideos/urban_2.mp4",
-      "style": "humorous_non_tech",
-      "caption": "A traffic jam so dense it looks like everyone simultaneously remembered they left the stove on. New York, baby.",
+      "task_id": "animals_1",
+      "video_url": "TestVideos/animals_1.mp4",
+      "style": "formal",
+      "caption": "Three dark-colored bovines traverse a grassy pasture from left to right, moving in a single file line against a backdrop of dense forest. The animals maintain a steady pace across the rocky terrain, eventually converging as they approach the right side of the field.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A traffic jam so committed, not one car dares to move first. New York's rush hour called and everyone showed up at once."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A city street packed with so many trucks and cars it looks like a metal river that forgot how to flow. Everyone is just vibing in the eternal gridlock."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A traffic jam so long it looks like everyone simultaneously remembered they left the stove on. New York, baby."
+          "caption": "Three dark-colored bovines traverse a grassy pasture from left to right, moving in a single file line against a backdrop of dense forest. The animals maintain a steady pace across the rocky terrain, eventually converging as they approach the right side of the field."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
+      "accuracy": 0.92,
+      "style_match": 1.0,
+      "score": 0.96
+    },
+    {
+      "task_id": "animals_1",
+      "video_url": "TestVideos/animals_1.mp4",
+      "style": "sarcastic",
+      "caption": "Three wild boars trot across a field in a perfect line, proving that even nature appreciates a well-organized commute. Truly breathtaking stuff.",
+      "candidates": [
+        {
+          "model": "qwen3p7-plus",
+          "caption": "Three wild boars trot across a field in a perfect line, proving that even nature appreciates a well-organized commute. Truly breathtaking stuff."
+        }
+      ],
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 0.98,
       "score": 0.965
@@ -498,71 +381,15 @@
     {
       "task_id": "animals_1",
       "video_url": "TestVideos/animals_1.mp4",
-      "style": "formal",
-      "caption": "Three dark-coated cattle traverse a rocky, grassy pasture in single file from left to right against a backdrop of dense forest.",
-      "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "Three dark-coated cattle walk across a grassy field bordered by a dense forest, moving steadily from left to right before eventually stopping near the center of the pasture."
-        },
-        {
-          "model": "qwen3p7-plus",
-          "caption": "Three dark-colored bovines traverse a rocky, grassy pasture in single file, moving from left to right against a backdrop of dense forest."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Three wildebeest traverse a grassy field dotted with rocks and tree stumps, moving from left to right with a dense forest and hillside in the background."
-        }
-      ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
-    },
-    {
-      "task_id": "animals_1",
-      "video_url": "TestVideos/animals_1.mp4",
-      "style": "sarcastic",
-      "caption": "Three wild boars trot across a field in perfect single file, proving that even nature appreciates a well-organized commute. Truly breathtaking wildlife cinematography.",
-      "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "Three donkeys trot across a field in a perfectly synchronized line, because apparently even livestock have choreography these days."
-        },
-        {
-          "model": "qwen3p7-plus",
-          "caption": "Three wild boars trot across a field in perfect single file, proving that even nature appreciates a well-organized commute. Truly breathtaking wildlife cinematography."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Three wildebeest stroll across a grassy field. Absolutely groundbreaking television, folks."
-        }
-      ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 0.92,
-      "score": 0.935
-    },
-    {
-      "task_id": "animals_1",
-      "video_url": "TestVideos/animals_1.mp4",
       "style": "humorous_tech",
-      "caption": "Three bulls execute a perfect sequential scan across the pasture, maintaining strict thread safety with zero race conditions.",
+      "caption": "Three bulls execute a perfect sequential read across the pasture, maintaining strict pointer alignment with zero packet loss.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Three horses run across a grassy field in perfect formation — looks like a well-optimized parallel process with zero race conditions.]<]minimax[>[</answer>"
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Three bulls execute a perfect sequential scan across the pasture, maintaining strict thread safety with zero race conditions."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Three wildebeest execute a distributed migration across the pasture with perfect load balancing and zero packet loss."
+          "caption": "Three bulls execute a perfect sequential read across the pasture, maintaining strict pointer alignment with zero packet loss."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -571,22 +398,14 @@
       "task_id": "animals_1",
       "video_url": "TestVideos/animals_1.mp4",
       "style": "humorous_non_tech",
-      "caption": "Three wildebeest trot across a field in perfect single file, like they're late for a very important meeting that started five minutes ago.",
+      "caption": "Three wild boars march across a field in perfect single file like they're late for a very important meeting. Nature's own little parade, no permits required.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Three donkeys trot across a grassy meadow like they're late for a meeting they definitely RSVP'd to."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Three wild boars trot across a field in perfect single file, like they're late for a very important meeting in the woods."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Three wildebeest running across a field like they're late for a very important meeting that started five minutes ago. The urgency is palpable, the direction is questionable."
+          "caption": "Three wild boars march across a field in perfect single file like they're late for a very important meeting. Nature's own little parade, no permits required."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -595,22 +414,14 @@
       "task_id": "animals_2",
       "video_url": "TestVideos/animals_2.mp4",
       "style": "formal",
-      "caption": "A leopard traverses a dry, wooded savanna, moving through sparse vegetation and leafless trees under a clear sky.",
+      "caption": "A leopard traverses a dry, wooded savanna, moving from left to right through sparse vegetation and leafless trees under a clear sky.",
       "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "A lioness moves through a dry savanna landscape, partially obscured by the bare branches of surrounding trees and shrubs as she traverses the tall, golden grass."
-        },
         {
           "model": "qwen3p7-plus",
           "caption": "A leopard traverses a dry, wooded savanna, moving from left to right through sparse vegetation and leafless trees under a clear sky."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A leopard moves through dry, sparse woodland, partially obscured by leafless branches and bushes as it traverses the arid terrain."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -619,46 +430,30 @@
       "task_id": "animals_2",
       "video_url": "TestVideos/animals_2.mp4",
       "style": "sarcastic",
-      "caption": "A leopard stalks a warthog through a dense thicket of out-of-focus branches, delivering a masterclass in wildlife cinematography where the foreground obstruction is clearly the main character.",
+      "caption": "A leopard strolls through the bush, graciously allowing us a fleeting glimpse between the endless barrage of out-of-focus branches. Truly a masterclass in wildlife cinematography.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Watch a leopard stealthily hunt a warthog in the bushes. Because nothing screams \"wildlife documentary\" like squinting at pixels in dry grass."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A leopard strolls through the bush, graciously allowing the camera to capture its majestic form through a strategic arrangement of out-of-focus branches. Truly, a masterclass in wildlife cinematography."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A leopard awkwardly stumbles through dry brush while a warthog stands nearby, presumably wondering if this counts as its lucky day. Nature's apex predator, everybody—truly a masterclass in stealth and grace."
+          "caption": "A leopard strolls through the bush, graciously allowing us a fleeting glimpse between the endless barrage of out-of-focus branches. Truly a masterclass in wildlife cinematography."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
-      "style_match": 0.98,
-      "score": 0.965
+      "style_match": 1.0,
+      "score": 0.975
     },
     {
       "task_id": "animals_2",
       "video_url": "TestVideos/animals_2.mp4",
       "style": "humorous_tech",
-      "caption": "A leopard executes a stealth protocol through the brush, successfully bypassing the foreground firewall of tangled branches.",
+      "caption": "A leopard executes a stealth routine through the dry brush, but the foreground trees are throwing major rendering errors and occlusion bugs.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Some lions are running stealth mode through dry branches, but the rendering engine keeps popping leaves and twigs straight into the camera's viewport. Looks like someone forgot to enable occlusion culling on this savanna build."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A leopard executes a stealth protocol through the brush, successfully bypassing the foreground firewall of tangled branches."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A leopard runs through dry brush to tackle a warthog, executing a perfect stealth takedown with zero prior warnings in the logs."
+          "caption": "A leopard executes a stealth routine through the dry brush, but the foreground trees are throwing major rendering errors and occlusion bugs."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -667,46 +462,30 @@
       "task_id": "animals_2",
       "video_url": "TestVideos/animals_2.mp4",
       "style": "humorous_non_tech",
-      "caption": "A leopard playing hide-and-seek behind a forest of bare branches, briefly revealing its spotted coat before vanishing. Nature's ultimate master of disguise just showing off for the camera.",
+      "caption": "A leopard tries to play hide-and-seek behind a bush, but the camera just pans away like it has better things to do. Nature's version of being left on read.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Play hide and seek with a leopard who clearly invented the game and brought tree branches as his secret weapon."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A leopard plays a high-stakes game of hide-and-seek behind a forest of bare branches, briefly revealing its spotted coat before vanishing back into the wilderness. Nature's ultimate master of disguise just showing off for the camera."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A leopard tiptoeing through the dry bush like it's late for a meeting it definitely didn't want to attend. Big cat energy, but make it awkward."
+          "caption": "A leopard tries to play hide-and-seek behind a bush, but the camera just pans away like it has better things to do. Nature's version of being left on read."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
+      "judge_model": null,
+      "accuracy": 0.92,
       "style_match": 1.0,
-      "score": 0.975
+      "score": 0.96
     },
     {
       "task_id": "people_1",
       "video_url": "TestVideos/people_1.mp4",
       "style": "formal",
-      "caption": "Numerous pedestrians traverse a paved public square flanked by historic stone buildings and outdoor dining areas under a partly cloudy sky.",
+      "caption": "Pedestrians traverse a paved public square flanked by historic stone buildings and outdoor dining areas under a partly cloudy sky.",
       "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "Numerous pedestrians traverse a paved pedestrian street lined with historic stone buildings, shops, and outdoor cafes under a clear blue sky."
-        },
         {
           "model": "qwen3p7-plus",
           "caption": "Pedestrians traverse a paved public square flanked by historic stone buildings and outdoor dining areas under a partly cloudy sky."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Pedestrians traverse a cobblestone plaza lined with historic stone buildings under a clear blue sky. Individuals and groups move through the open square, passing by storefronts and architectural facades in a bustling urban setting."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -715,22 +494,14 @@
       "task_id": "people_1",
       "video_url": "TestVideos/people_1.mp4",
       "style": "sarcastic",
-      "caption": "Tourists wander through a historic stone plaza, absolutely riveted by the groundbreaking spectacle of other tourists wandering through a historic stone plaza.",
+      "caption": "Thrilling footage of tourists walking through a historic square, proving that putting one foot in front of the other is truly the peak of human entertainment.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A crowd of tourists wanders through a cobblestone plaza flanked by historic stone buildings, absolutely riveted by the sight of... more old buildings and more tourists."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Thrilling footage of tourists walking past old stone buildings, because nothing says cinematic masterpiece like a crowded pedestrian zone on a sunny day."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "People walk around a European-style town square with old stone buildings under a blue sky. Because apparently nothing says \"cutting-edge entertainment\" like watching strangers commute on foot."
+          "caption": "Thrilling footage of tourists walking through a historic square, proving that putting one foot in front of the other is truly the peak of human entertainment."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -739,22 +510,14 @@
       "task_id": "people_1",
       "video_url": "TestVideos/people_1.mp4",
       "style": "humorous_tech",
-      "caption": "Pedestrians navigate the plaza in a highly concurrent loop with zero merge conflicts, though production traffic is definitely exceeding the thread pool's max capacity.",
+      "caption": "Pedestrians navigate the cobblestone plaza with zero collision detection, executing a flawless distributed routing algorithm between the legacy stone architectures.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Tourists swarm the plaza in a highly concurrent loop — no garbage collection in sight, just pure unsynchronized chaos. Production traffic is definitely exceeding the thread pool's max capacity."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Pedestrians navigate the cobblestone广场 with zero merge conflicts, executing a flawless concurrent routing algorithm under optimal weather conditions."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A pedestrian street running heavy concurrent processes with no mutex in sight. Eventually someone will hit a deadlock, but until then it's all smooth threading."
+          "caption": "Pedestrians navigate the cobblestone plaza with zero collision detection, executing a flawless distributed routing algorithm between the legacy stone architectures."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -763,22 +526,14 @@
       "task_id": "people_1",
       "video_url": "TestVideos/people_1.mp4",
       "style": "humorous_non_tech",
-      "caption": "Tourists wandering through a historic square with the confidence of people who definitely aren't lost. Probably.",
+      "caption": "A crowd of tourists wanders through a historic stone square, collectively pretending they aren't looking for a place to sit down and rest their feet.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Just a bunch of tourists wandering around a plaza, all confidently heading in completely different directions like they definitely know where they're going."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Tourists wandering through a historic square with the confidence of people who definitely aren't lost. Probably."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A bunch of tourists wandering around like they forgot where they parked, while the buildings just stand there judging them. Classic vacation energy."
+          "caption": "A crowd of tourists wanders through a historic stone square, collectively pretending they aren't looking for a place to sit down and rest their feet."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -787,118 +542,78 @@
       "task_id": "people_2",
       "video_url": "TestVideos/people_2.mp4",
       "style": "formal",
-      "caption": "Pedestrians traverse a covered colonnade defined by stone columns and arches, moving in both directions toward and away from a large arched opening at the far end.",
+      "caption": "A crowd of pedestrians walks through a grand, columned arcade, moving in various directions beneath a series of stone arches.",
       "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "A dense crowd of pedestrians walks through a covered colonnade featuring stone arches and columns, with individuals moving in both directions along the passageway."
-        },
         {
           "model": "qwen3p7-plus",
           "caption": "A crowd of pedestrians walks through a grand, columned arcade, moving in various directions beneath a series of stone arches."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Pedestrians move through a covered colonnade with tall columns and a large arched opening at the far end. The crowd flows in both directions, with individuals walking toward and away from the camera."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.98,
+      "judge_model": null,
+      "accuracy": 1.0,
       "style_match": 1.0,
-      "score": 0.99
+      "score": 1.0
     },
     {
       "task_id": "people_2",
       "video_url": "TestVideos/people_2.mp4",
       "style": "sarcastic",
-      "caption": "A crowd shuffles through a grand colonnade with the thrilling pace and excitement of a DMV waiting room. Truly a breathtaking display of human locomotion.",
+      "caption": "A crowd of people walks through a colonnade with the architectural grace of a herd of cattle. Truly, a breathtaking display of human individuality.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A crowd shuffles through an ancient colonnade, each person utterly convinced they're the main character in this historic masterpiece."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A crowd of tourists shuffles through a grand, columned hallway with the thrilling pace and excitement of a DMV waiting room. Truly a breathtaking display of human locomotion."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "People walk through a covered colonnade. Because nothing says \"must-see entertainment\" like watching strangers commute."
+          "caption": "A crowd of people walks through a colonnade with the architectural grace of a herd of cattle. Truly, a breathtaking display of human individuality."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 0.98,
+      "judge_model": null,
+      "accuracy": 0.98,
+      "style_match": 0.95,
       "score": 0.965
     },
     {
       "task_id": "people_2",
       "video_url": "TestVideos/people_2.mp4",
       "style": "humorous_tech",
-      "caption": "Pedestrians stream through the colonnade like a congested data pipeline, with foreground packets suffering severe motion blur and packet loss.",
+      "caption": "Pedestrians execute a high-concurrency walk cycle through the colonnade, but the foreground rendering is clearly suffering from severe motion blur and packet loss.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A crowd of pedestrians walks through a crowded arcade — peak rush hour, zero bandwidth allocation, everyone's just hoping to make it through without a packet collision."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Pedestrians stream through the colonnade like a high-traffic data pipeline, though the foreground packets are suffering from severe motion blur and packet loss."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Pedestrians in a colonnade corridor executing infinite loop traversal with no exit condition in sight."
+          "caption": "Pedestrians execute a high-concurrency walk cycle through the colonnade, but the foreground rendering is clearly suffering from severe motion blur and packet loss."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 0.98,
-      "score": 0.965
-    },
-    {
-      "task_id": "people_2",
-      "video_url": "TestVideos/people_2.mp4",
-      "style": "humorous_non_tech",
-      "caption": "A crowd shuffles through a grand hallway like a slow-motion game of human Tetris, everyone strictly avoiding eye contact to protect their personal bubble.",
-      "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "A crowd shuffles through a fancy old arcade, everyone's got somewhere to be, and nobody's making eye contact. Just classic tourist energy with extra brick columns."
-        },
-        {
-          "model": "qwen3p7-plus",
-          "caption": "A crowd of people shuffles through a grand hallway like a slow-motion game of human Tetris. Everyone's just trying to get to the other side without making eye contact."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Just a bunch of people walking through a fancy hallway like they've all got somewhere slightly more important to be. Nobody's making eye contact, everyone's winning at personal bubble."
-        }
-      ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
     },
     {
+      "task_id": "people_2",
+      "video_url": "TestVideos/people_2.mp4",
+      "style": "humorous_non_tech",
+      "caption": "A crowd of people shuffles through a grand hallway like they're all late for the same unimportant meeting. The guy in the fedora is definitely judging everyone's pace.",
+      "candidates": [
+        {
+          "model": "qwen3p7-plus",
+          "caption": "A crowd of people shuffles through a grand hallway like they're all late for the same unimportant meeting. The guy in the fedora is definitely judging everyone's pace."
+        }
+      ],
+      "judge_model": null,
+      "accuracy": 0.92,
+      "style_match": 1.0,
+      "score": 0.96
+    },
+    {
       "task_id": "sports_1",
       "video_url": "TestVideos/sports_1.mp4",
       "style": "formal",
-      "caption": "An aerial view captures a soccer stadium illuminated by floodlights with spectators in the stands, as the camera pulls back to reveal distant mountains against a twilight sky transitioning from orange to dark blue.",
+      "caption": "An aerial view captures a soccer stadium illuminated by floodlights at dusk, with spectators filling the stands as the camera pans to reveal the surrounding mountains against a twilight sky.",
       "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "An aerial view captures a soccer stadium illuminated by floodlights as the sky transitions from night to dawn, revealing the surrounding cityscape and distant mountains."
-        },
         {
           "model": "qwen3p7-plus",
           "caption": "An aerial view captures a soccer stadium illuminated by floodlights at dusk, with spectators filling the stands as the camera pans to reveal the surrounding mountains against a twilight sky."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "An aerial view captures a soccer match underway in a large outdoor stadium illuminated by floodlights, with spectators filling the stands as dusk settles over the distant mountains. The camera gradually pulls back to reveal more of the surrounding landscape and the evening sky transitioning from orange to dark blue."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -907,70 +622,46 @@
       "task_id": "sports_1",
       "video_url": "TestVideos/sports_1.mp4",
       "style": "sarcastic",
-      "caption": "An aerial drone circles a soccer stadium as the sky transitions from night to sunset, capturing the thrilling spectacle of a field that remains completely unchanged. Truly groundbreaking cinematography—next they'll show us grass growing in real time.",
+      "caption": "An aerial drone slowly pans over a soccer stadium at dusk, capturing the breathtaking spectacle of a few players running on a field while thousands of empty seats stare back in silent judgment. Truly, the pinnacle of sporting excitement.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "An aerial view of a soccer stadium transitions from fully lit at night to a stunning sunset. Truly groundbreaking stuff—next they'll show us grass growing in real time."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "An aerial drone slowly pans over a soccer stadium at dusk, capturing the thrilling spectacle of an empty field under bright lights. Truly, the visual equivalent of watching paint dry, but with better floodlights."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A drone slowly circles a half-empty soccer stadium at sunset. Truly groundbreaking cinematography, revolutionizing the art of showing people kick a ball around."
+          "caption": "An aerial drone slowly pans over a soccer stadium at dusk, capturing the breathtaking spectacle of a few players running on a field while thousands of empty seats stare back in silent judgment. Truly, the pinnacle of sporting excitement."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
+      "judge_model": null,
+      "accuracy": 0.35,
+      "style_match": 0.95,
+      "score": 0.65
     },
     {
       "task_id": "sports_1",
       "video_url": "TestVideos/sports_1.mp4",
       "style": "humorous_tech",
-      "caption": "Stadium floodlights execute a seamless fade-in as the sky transitions from day mode to night theme without a single frame drop.",
+      "caption": "The stadium renders a sunset background while the floodlights maintain 100% brightness on the pitch. No lag detected in this high-resolution aerial deployment.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A soccer stadium transitions from full brightness to a stunning sunset timelapse — looks like someone cranked the ambient lighting from 100% to golden hour in real-time. Peak HDR content rendering against real life."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The stadium floodlights execute a graceful fade-in as the sky transitions from day mode to night theme without a single frame drop."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The stadium's floodlights successfully overrode the sunset's dimming brightness; legacy system refusing to deprecate."
+          "caption": "The stadium renders a sunset background while the floodlights maintain 100% brightness on the pitch. No lag detected in this high-resolution aerial deployment."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
+      "style_match": 0.98,
+      "score": 0.965
     },
     {
       "task_id": "sports_1",
       "video_url": "TestVideos/sports_1.mp4",
       "style": "humorous_non_tech",
-      "caption": "The stadium lights are working overtime as the sun makes a dramatic exit, proving nature’s special effects budget is truly unlimited.",
+      "caption": "The stadium lights are working overtime to keep the game going while the sun dramatically clocks out for the day. Nature's curfew is real, but floodlights don't care.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A tiny soccer stadium glowing under the night sky, where the players look like ants playing a game the stadium lights are way too invested in."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The stadium lights are working overtime to keep the game going while the sun clocks out with a dramatic sunset exit. Nature’s special effects budget is clearly unlimited."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A stadium full of people watching tiny humans run around a giant lawn at sunset. We really will pack into a building just to watch strangers exercise."
+          "caption": "The stadium lights are working overtime to keep the game going while the sun dramatically clocks out for the day. Nature's curfew is real, but floodlights don't care."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 0.98,
       "score": 0.965
@@ -979,70 +670,46 @@
       "task_id": "sports_2",
       "video_url": "TestVideos/sports_2.mp4",
       "style": "formal",
-      "caption": "A wide-angle view captures a professional soccer match in progress at a large, illuminated stadium filled with spectators, where players in red and white kits compete on the pitch as the scoreboard displays a 2-0 score.",
+      "caption": "A wide-angle view captures a professional soccer match in progress at a large, crowded stadium under bright floodlights. Players in red and white uniforms are positioned across the green pitch while spectators fill the stands, many holding up illuminated devices.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A football match is played in a large, illuminated stadium before a packed crowd, with players in red and white kits competing on the green pitch as the scoreboard displays a 2-0 result."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A wide-angle view captures a professional soccer match in progress at a large, packed stadium under bright floodlights. Players in red and white kits are positioned across the green pitch while the scoreboard indicates a score of 2-0."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A football match proceeds in a large, illuminated stadium filled with spectators, with the scoreboard indicating a 2-0 score as players move across the pitch. The camera pans across the venue, capturing the crowd and the ongoing gameplay under bright overhead lights."
+          "caption": "A wide-angle view captures a professional soccer match in progress at a large, crowded stadium under bright floodlights. Players in red and white uniforms are positioned across the green pitch while spectators fill the stands, many holding up illuminated devices."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 1.0,
+      "judge_model": null,
+      "accuracy": 0.95,
       "style_match": 1.0,
-      "score": 1.0
+      "score": 0.975
     },
     {
       "task_id": "sports_2",
       "video_url": "TestVideos/sports_2.mp4",
       "style": "sarcastic",
-      "caption": "Thousands of fans pack a stadium under dramatic floodlights to watch twenty-two people chase a ball while the scoreboard confirms the home team is winning 2-0. Truly the pinnacle of human achievement.",
+      "caption": "Thousands of people gather in a massive, light-drenched stadium to watch eleven men chase a ball around a field, because clearly, this is the most efficient use of human energy and electricity.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Oh look, another soccer match under blinding floodlights—because nothing screams \"athletic excellence\" quite like 22 people chasing a ball while tens of thousands of fans collectively forget their Wednesday night plans."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Thousands of fans gather under dramatic spotlights to watch twenty-two people casually jog around a field while the scoreboard reminds everyone that the home team is winning 2-0. Truly a breathtaking display of athletic excellence and high-stakes competition."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Tens of thousands of people pack a stadium to watch millionaires kick a ball around. Civilization has peaked, folks."
+          "caption": "Thousands of people gather in a massive, light-drenched stadium to watch eleven men chase a ball around a field, because clearly, this is the most efficient use of human energy and electricity."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 1.0,
-      "style_match": 1.0,
-      "score": 1.0
+      "judge_model": null,
+      "accuracy": 0.98,
+      "style_match": 0.95,
+      "score": 0.965
     },
     {
       "task_id": "sports_2",
       "video_url": "TestVideos/sports_2.mp4",
       "style": "humorous_tech",
-      "caption": "Stadium lights maxed out while 22 players stress-test the field's render engine at 60fps, with the scoreboard hardcoding a 2-0 victory condition.",
+      "caption": "The stadium runs a high-concurrency match with zero packet loss, while the scoreboard confirms the home team’s build is successfully deployed at 2-0.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Stadium lights fully maxed out while 22 players stress-test the field's render engine at 60fps. Always check the scoreboard before pushing to production."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The stadium renders a massive crowd of pixels under high-intensity ray tracing, while players execute a live multiplayer match with the scoreboard hardcoding a 2-0 victory condition."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The entire stadium is running light mode with 50,000 concurrent mobile flashlights — battery optimization failed across all nodes."
+          "caption": "The stadium runs a high-concurrency match with zero packet loss, while the scoreboard confirms the home team’s build is successfully deployed at 2-0."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -1051,22 +718,14 @@
       "task_id": "sports_2",
       "video_url": "TestVideos/sports_2.mp4",
       "style": "humorous_non_tech",
-      "caption": "Fifty thousand people paid good money to watch 22 grown men chase a ball around a lawn. And honestly? Same.",
+      "caption": "A packed stadium glowing under dramatic spotlights while thousands of fans hold up their phone flashlights like a giant, expensive firefly convention. Meanwhile, the players are just trying to play soccer without getting dazzled by the light show.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A packed stadium full of people watching 22 grown men chase a ball around for two hours, and somehow it's the most exciting thing on Earth."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A packed stadium glowing under dramatic spotlights while thousands of fans hold up their phones like a giant, chaotic constellation. Meanwhile, the players are just trying to play soccer down there on the grass."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Fifty thousand people paid good money to watch 22 grown men chase a ball around a lawn. And honestly? Same."
+          "caption": "A packed stadium glowing under dramatic spotlights while thousands of fans hold up their phone flashlights like a giant, expensive firefly convention. Meanwhile, the players are just trying to play soccer without getting dazzled by the light show."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -1078,19 +737,11 @@
       "caption": "A chef stir-fries ingredients in a wok over an open flame, adding liquid seasonings from a bottle and a squeeze container during the cooking process.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A chef stirs ingredients in a wok over an open flame, then dispenses sauce from a squeeze bottle into the pan while continuing to cook."
-        },
-        {
           "model": "qwen3p7-plus",
           "caption": "A chef stir-fries ingredients in a wok over an open flame, adding liquid seasonings from a bottle and a squeeze container during the cooking process."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A chef stirs ingredients in a heated wok over an open flame, then adds liquid seasoning from a bottle and a squeeze bottle while continuing to cook."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -1099,118 +750,94 @@
       "task_id": "food_1",
       "video_url": "TestVideos/food_1.mp4",
       "style": "sarcastic",
-      "caption": "A chef dramatically pours mystery liquids from bottles into a flaming wok, because apparently, this is the pinnacle of culinary innovation we’ve all been waiting for.",
+      "caption": "A chef stir-fries vegetables and adds sauce from a squeeze bottle, because nothing says gourmet dining like condiment application. Truly, the culinary arts have peaked.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A chef dramatically ladles mysterious sauces into a flaming wok. Groundbreaking culinary innovation, truly — who knew pouring liquid into hot oil was the secret to art."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A chef stir-fries vegetables and then dramatically adds sauce from a squeeze bottle, because apparently, we needed to see the precise moment culinary genius strikes."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A chef violently tosses vegetables in a wok, then douses them with mystery liquids from bottles. Absolutely groundbreaking culinary innovation happening here."
+          "caption": "A chef stir-fries vegetables and adds sauce from a squeeze bottle, because nothing says gourmet dining like condiment application. Truly, the culinary arts have peaked."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.92,
+      "judge_model": null,
+      "accuracy": 0.95,
+      "style_match": 1.0,
+      "score": 0.975
+    },
+    {
+      "task_id": "food_1",
+      "video_url": "TestVideos/food_1.mp4",
+      "style": "humorous_tech",
+      "caption": "Chef executes a hotfix on the wok, injecting sauce dependencies directly into the production environment.",
+      "candidates": [
+        {
+          "model": "qwen3p7-plus",
+          "caption": "Chef executes a hotfix on the wok, injecting sauce dependencies directly into the production environment."
+        }
+      ],
+      "judge_model": null,
+      "accuracy": 0.95,
+      "style_match": 0.98,
+      "score": 0.965
+    },
+    {
+      "task_id": "food_1",
+      "video_url": "TestVideos/food_1.mp4",
+      "style": "humorous_non_tech",
+      "caption": "A chef tosses veggies in a wok before grabbing a bottle and a giant squeeze tube to add some serious flavor. That's one way to make dinner interesting.",
+      "candidates": [
+        {
+          "model": "qwen3p7-plus",
+          "caption": "A chef tosses veggies in a wok before grabbing a bottle and a giant squeeze tube to add some serious flavor. That's one way to make dinner interesting."
+        }
+      ],
+      "judge_model": null,
+      "accuracy": 1.0,
       "style_match": 0.95,
+      "score": 0.975
+    },
+    {
+      "task_id": "food_2",
+      "video_url": "TestVideos/food_2.mp4",
+      "style": "formal",
+      "caption": "A chef in a professional kitchen sprinkles flour onto a countertop before kneading a large ball of dough.",
+      "candidates": [
+        {
+          "model": "qwen3p7-plus",
+          "caption": "A chef in a professional kitchen sprinkles flour onto a countertop before kneading a large ball of dough."
+        }
+      ],
+      "judge_model": null,
+      "accuracy": 1.0,
+      "style_match": 1.0,
+      "score": 1.0
+    },
+    {
+      "task_id": "food_2",
+      "video_url": "TestVideos/food_2.mp4",
+      "style": "sarcastic",
+      "caption": "A chef dramatically dusts flour onto a ball of dough before kneading it with intense focus, proving that making bread is basically high-stakes performance art.",
+      "candidates": [
+        {
+          "model": "qwen3p7-plus",
+          "caption": "A chef dramatically dusts flour onto a ball of dough before kneading it with intense focus, proving that making bread is basically high-stakes performance art."
+        }
+      ],
+      "judge_model": null,
+      "accuracy": 0.95,
+      "style_match": 0.92,
       "score": 0.935
     },
     {
-      "task_id": "food_1",
-      "video_url": "TestVideos/food_1.mp4",
+      "task_id": "food_2",
+      "video_url": "TestVideos/food_2.mp4",
       "style": "humorous_tech",
-      "caption": "Chef injects sauce dependencies directly into the running wok process — hotfix deployed to production with zero downtime.",
+      "caption": "A chef applies a flour patch to the dough instance before beginning a rigorous refactoring loop to optimize its structure.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Chef deploys sauce from a squeeze bottle straight into the hot pan — zero-day exploit executed live in production."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Chef executes a hotfix on the wok, injecting a new sauce dependency to resolve the flavor bugs."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Chef hot-swaps sauce modules into a running wok process — zero downtime, maximum flavor throughput."
+          "caption": "A chef applies a flour patch to the dough instance before beginning a rigorous refactoring loop to optimize its structure."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
-    },
-    {
-      "task_id": "food_1",
-      "video_url": "TestVideos/food_1.mp4",
-      "style": "humorous_non_tech",
-      "caption": "A chef wielding a giant ladle like a scepter finally adds the secret sauce — straight from a giant squeeze bottle, because stir-fry drama needs a finale.",
-      "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "A chef wielding a giant ladle like a scepter finally adds the secret sauce — straight from a giant squeeze bottle, because stir-fry drama needs a finale."
-        },
-        {
-          "model": "qwen3p7-plus",
-          "caption": "A chef stir-frying with serious flair, then casually squirts in some sauce like it’s no big deal. That wok is getting a full spa treatment."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A chef furiously stir-frying in a blazing wok, then grabbing bottles like he's mixing a drink at a party that got way too hot. Somebody's dinner is about to taste like a beautiful mistake."
-        }
-      ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
-    },
-    {
-      "task_id": "food_2",
-      "video_url": "TestVideos/food_2.mp4",
-      "style": "formal",
-      "caption": "A chef in a professional kitchen sprinkles flour over a ball of dough on a marble counter and kneads it, while another person tends to a pan in the foreground.",
-      "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "A chef in a restaurant kitchen sprinkles flour over a ball of dough on a marble counter, then kneads it by hand while another person stirs a pan in the foreground."
-        },
-        {
-          "model": "qwen3p7-plus",
-          "caption": "A chef in a professional kitchen sprinkles flour onto a countertop before kneading a large ball of dough. Various prepared ingredients and cookware are arranged on the workspace surrounding the preparation area."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A chef in a white uniform kneads and shapes a large ball of dough on a floured kitchen counter, surrounded by bowls of ingredients and stacked plates."
-        }
-      ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
-    },
-    {
-      "task_id": "food_2",
-      "video_url": "TestVideos/food_2.mp4",
-      "style": "sarcastic",
-      "caption": "A chef sprinkles flour and kneads dough with the intense focus of a brain surgeon, proving that making bread is definitely the most high-stakes operation in the kitchen.",
-      "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "A man sprinkles flour on dough and shapes it with intense focus, as if the fate of civilization rests on this bread. Truly, groundbreaking culinary artistry happening here."
-        },
-        {
-          "model": "qwen3p7-plus",
-          "caption": "A chef dramatically sprinkles flour and kneads dough with the intense focus of a brain surgeon, proving that making bread is definitely the most high-stakes operation in the kitchen."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A bearded man in a white shirt kneads a large ball of dough on a kitchen counter. Truly gripping cinema — someone alert the culinary Oscars."
-        }
-      ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 0.98,
       "score": 0.965
@@ -1218,119 +845,63 @@
     {
       "task_id": "food_2",
       "video_url": "TestVideos/food_2.mp4",
-      "style": "humorous_tech",
-      "caption": "Chef injects flour dependencies into the dough object before running a manual kneading algorithm to refactor its shape.",
-      "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "Chef sprinkles flour over dough in a manual commit, no version control, no rollback — pure artisanal firmware update."
-        },
-        {
-          "model": "qwen3p7-plus",
-          "caption": "A chef injects flour dependencies into the dough object before running a manual kneading algorithm to refactor its shape."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A chef performs a manual dough migration across the prep surface, carefully avoiding data loss by keeping both hands on the payload. The pizza kernel is still raw, but the process priority is clearly set to high."
-        }
-      ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
-    },
-    {
-      "task_id": "food_2",
-      "video_url": "TestVideos/food_2.mp4",
       "style": "humorous_non_tech",
-      "caption": "A chef showers dough with flour like he's blessing it, then kneads it with the seriousness of someone defusing a bomb. The bread doesn't know how lucky it is.",
+      "caption": "A chef gives a ball of dough a dramatic flour shower and a serious kneading, proving that even bread needs a little tough love.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A chef showers dough with flour like he's blessing it, then kneads it with the seriousness of someone defusing a bomb. The bread doesn't know how lucky it is."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A chef gives a ball of dough a serious flour shower and then kneads it with the focus of a man defusing a bomb. That bread better be amazing."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A guy kneading dough like he's trying to negotiate with it. Buddy, that bread isn't paying your rent."
+          "caption": "A chef gives a ball of dough a dramatic flour shower and a serious kneading, proving that even bread needs a little tough love."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
+      "style_match": 0.98,
+      "score": 0.965
     },
     {
       "task_id": "weather_1",
       "video_url": "TestVideos/weather_1.mp4",
       "style": "formal",
-      "caption": "A large cumulonimbus cloud formation expands across a blue sky above a flat, rural landscape, with a utility pole visible in the foreground.",
+      "caption": "A large cumulonimbus cloud expands vertically above a flat, rural landscape under a blue sky.",
       "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "A large cumulonimbus cloud formation develops and expands across a blue sky above a flat landscape, with a utility pole visible in the foreground."
-        },
         {
           "model": "qwen3p7-plus",
           "caption": "A large cumulonimbus cloud expands vertically above a flat, rural landscape under a blue sky."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A large cumulonimbus cloud formation expands and shifts across a rural sky, with utility poles and open fields visible below."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 1.0,
+      "judge_model": null,
+      "accuracy": 0.95,
       "style_match": 1.0,
-      "score": 1.0
+      "score": 0.975
     },
     {
       "task_id": "weather_1",
       "video_url": "TestVideos/weather_1.mp4",
       "style": "sarcastic",
-      "caption": "A massive cumulus cloud towers over a lone utility pole in a flat field. Truly the pinnacle of cinematic achievement, I am visibly shaken.",
+      "caption": "A giant cloud slowly expands over a field, proving that watching paint dry was actually the more exciting option. Truly edge-of-your-seat stuff.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A massive cumulus cloud dramatically towers over a lone light pole in a flat field. Wow, nature's budget special effects really outdid themselves today."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A giant cloud expands over a field with a telephone pole. Truly groundbreaking cinematography, I can barely contain my excitement."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Clouds slowly billow over a field. Absolutely groundbreaking footage that changes everything we know about meteorology."
+          "caption": "A giant cloud slowly expands over a field, proving that watching paint dry was actually the more exciting option. Truly edge-of-your-seat stuff."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 1.0,
-      "style_match": 1.0,
-      "score": 1.0
+      "judge_model": null,
+      "accuracy": 0.95,
+      "style_match": 0.98,
+      "score": 0.965
     },
     {
       "task_id": "weather_1",
       "video_url": "TestVideos/weather_1.mp4",
       "style": "humorous_tech",
-      "caption": "A massive cumulonimbus cloud scales vertically until it hits the atmosphere's memory limit—someone definitely forgot to set a max-height on this deployment.",
+      "caption": "A massive cumulonimbus cloud scales vertically like a runaway recursive function, consuming all available sky memory until the system crashes into a thunderstorm.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A massive cumulus cloud deploys to production — clearly skipped the staging environment. The lone power line looks like it forgot to commit and exit vim."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A massive cumulonimbus cloud scales vertically until it hits the atmosphere's memory limit. Someone definitely forgot to set a max-height on this deployment."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Cloud formation stuck in an infinite while loop, consuming 98% of sky resources."
+          "caption": "A massive cumulonimbus cloud scales vertically like a runaway recursive function, consuming all available sky memory until the system crashes into a thunderstorm."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 0.98,
       "score": 0.965
@@ -1339,46 +910,30 @@
       "task_id": "weather_1",
       "video_url": "TestVideos/weather_1.mp4",
       "style": "humorous_non_tech",
-      "caption": "A giant cloud puffs itself up like it's trying to win a bodybuilding competition against the sky. The power pole down there is just watching, completely unimpressed.",
+      "caption": "A giant cloud puffs up like it’s trying to win a bodybuilding contest against the sky. Spoiler: it wins.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A giant cloud rolls across the sky like it's late for an appointment, silently towering over a lonely lamppost. Mother Nature really said \"let me show off\" today."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A giant cloud puffs itself up like it's trying to win a bodybuilding competition against the sky. The power pole down there is just watching, completely unimpressed."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "That cloud is absolutely showing off at the county fair sky contest. Meanwhile the telephone pole's just standing there like \"yep, still here.\""
+          "caption": "A giant cloud puffs up like it’s trying to win a bodybuilding contest against the sky. Spoiler: it wins."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 0.98,
-      "style_match": 1.0,
-      "score": 0.99
+      "judge_model": null,
+      "accuracy": 0.95,
+      "style_match": 0.98,
+      "score": 0.965
     },
     {
       "task_id": "weather_2",
       "video_url": "TestVideos/weather_2.mp4",
       "style": "formal",
-      "caption": "Dense gray clouds drift across an overcast sky, gradually shifting and changing formation as they move.",
+      "caption": "Dark, dense clouds drift across an overcast sky, obscuring the lighter atmosphere beneath.",
       "candidates": [
-        {
-          "model": "minimax-m3",
-          "caption": "Dense gray cloud formations drift slowly across an overcast sky, with subtle variations in light and shadow visible through the shifting layers."
-        },
         {
           "model": "qwen3p7-plus",
           "caption": "Dark, dense clouds drift across an overcast sky, obscuring the lighter atmosphere beneath."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Dense gray clouds drift across an overcast sky, gradually shifting and changing formation as they move."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.98,
       "style_match": 1.0,
       "score": 0.99
@@ -1387,46 +942,30 @@
       "task_id": "weather_2",
       "video_url": "TestVideos/weather_2.mp4",
       "style": "sarcastic",
-      "caption": "Gray clouds drift across the sky in a breathtaking display of meteorological excitement. Truly, the kind of high-stakes drama we all live for.",
+      "caption": "Gray clouds drift across the sky in a breathtaking display of absolute nothing happening. Truly, the kind of riveting spectacle that defines a generation.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Gray clouds drift across the sky like they have absolutely nothing better to do."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Gray clouds drift across the sky in a breathtaking display of meteorological excitement. Truly, the kind of high-stakes drama we all live for."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Gray clouds slowly drift across a gloomy sky. Absolutely groundbreaking cinematography, truly."
+          "caption": "Gray clouds drift across the sky in a breathtaking display of absolute nothing happening. Truly, the kind of riveting spectacle that defines a generation."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
-      "style_match": 1.0,
-      "score": 1.0
+      "style_match": 0.98,
+      "score": 0.99
     },
     {
       "task_id": "weather_2",
       "video_url": "TestVideos/weather_2.mp4",
       "style": "humorous_tech",
-      "caption": "The sky is running a heavy cloud migration with zero visibility into the production environment. Looks like someone forgot to configure the load balancer for sunshine.",
+      "caption": "The sky is running a heavy cloud migration with zero uptime guaranteed. Looks like someone forgot to configure the CDN for clear weather.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Clouds running on legacy hardware — full grey screen of death, no UI in sight."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The sky is running a heavy cloud migration with zero visibility into the production environment. Looks like someone forgot to configure the load balancer for sunshine."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The cloud deployment is scaling horizontally, but the SRE team still hasn't figured out how to trigger a rollback."
+          "caption": "The sky is running a heavy cloud migration with zero uptime guaranteed. Looks like someone forgot to configure the CDN for clear weather."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.98,
       "style_match": 0.95,
       "score": 0.965
@@ -1435,22 +974,14 @@
       "task_id": "weather_2",
       "video_url": "TestVideos/weather_2.mp4",
       "style": "humorous_non_tech",
-      "caption": "Gray clouds drifting across the sky like a moody teenager who refuses to explain what's wrong.",
+      "caption": "The sky is serving a dramatic, gloomy look like it's about to cancel everyone's outdoor plans. Nature really knows how to hold a grudge with these clouds.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Gray clouds doing their dramatic slow-motion shift across the sky like a moody teenager who refuses to explain what's wrong."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The sky is having a full-on dramatic moment, dragging its gloomy clouds across the frame like it's starring in its own soap opera. Honestly, the weather is being more extra than most people I know."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The sky's just sitting there being moody and gray, like someone who said \"I'm fine\" but definitely is not."
+          "caption": "The sky is serving a dramatic, gloomy look like it's about to cancel everyone's outdoor plans. Nature really knows how to hold a grudge with these clouds."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.98,
       "style_match": 0.95,
       "score": 0.965
@@ -1459,22 +990,14 @@
       "task_id": "tech_1",
       "video_url": "TestVideos/tech_1.mp4",
       "style": "formal",
-      "caption": "A computer monitor displays a continuous stream of network ping command output, showing data packets with 32 bytes, a TTL of 60, and response times measured in milliseconds.",
+      "caption": "A computer monitor displays the continuous output of a network ping command, showing repeated lines of text with data packet statistics including bytes, response time in milliseconds, and TTL values.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A computer terminal displays a continuous stream of network ping responses, showing sequential data entries with consistent packet sizes and varying response times scrolling across the screen."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A computer monitor displays a continuous stream of network ping command output, showing data packets sent to an IP address with response times measured in milliseconds and a TTL value of 60."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A computer screen displays scrolling lines of ping command output, showing repeated network response data with IP addresses, byte counts, response times in milliseconds, and TTL values."
+          "caption": "A computer monitor displays the continuous output of a network ping command, showing repeated lines of text with data packet statistics including bytes, response time in milliseconds, and TTL values."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -1483,22 +1006,14 @@
       "task_id": "tech_1",
       "video_url": "TestVideos/tech_1.mp4",
       "style": "sarcastic",
-      "caption": "A terminal endlessly scrolls identical ping replies. Truly edge-of-your-seat entertainment.",
+      "caption": "A ping command scrolls endlessly across a screen, proving that watching text repeat itself is the absolute peak of digital entertainment. Truly, a masterpiece of cinematic storytelling.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A terminal endlessly spits out identical ping replies. Riveting drama, truly."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Watching a ping command scroll endlessly is clearly the peak of cinematic entertainment we've all been waiting for."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A computer screen shows ping response lines scrolling endlessly in a terminal window. Truly edge-of-your-seat entertainment right here."
+          "caption": "A ping command scrolls endlessly across a screen, proving that watching text repeat itself is the absolute peak of digital entertainment. Truly, a masterpiece of cinematic storytelling."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 1.0,
       "style_match": 1.0,
       "score": 1.0
@@ -1507,118 +1022,78 @@
       "task_id": "tech_1",
       "video_url": "TestVideos/tech_1.mp4",
       "style": "humorous_tech",
-      "caption": "A terminal executes a relentless ping loop with zero packet loss—looks like someone found infinite uptime and forgot to write the kill switch.",
+      "caption": "A ping command runs an infinite loop of validation, proving the server is alive while my motivation returns a 404.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A terminal running a relentless ping loop with zero packet loss — looks like someone found infinite uptime and forgot to write the kill switch. Classic cron job with supervillain tendencies."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A ping command runs an infinite loop of UDP handshakes, proving the server is alive but definitely not listening to my emotional packets."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Someone left a ping running overnight and now the terminal has more lines than my commit history."
+          "caption": "A ping command runs an infinite loop of validation, proving the server is alive while my motivation returns a 404."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
-      "style_match": 0.98,
-      "score": 0.965
+      "style_match": 1.0,
+      "score": 0.975
     },
     {
       "task_id": "tech_1",
       "video_url": "TestVideos/tech_1.mp4",
       "style": "humorous_non_tech",
-      "caption": "A computer screaming \"I'm here!\" into the digital void over and over again. It’s basically yelling \"Marco!\" to an empty pool, hoping for a \"Polo.\"",
+      "caption": "A computer screen scrolling endlessly with network data like it's trying to win a typing competition against itself. Truly the digital equivalent of staring at a loading bar.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A terminal keeps spitting out \"32 bytes\" replies like a chatty neighbor who only ever says \"fine.\" Someone pinged the void and the void keeps politely answering."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "A computer screaming \"I'm here!\" into the digital void over and over again. It’s basically yelling \"Marco!\" to an empty pool, hoping for a \"Polo.\""
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A screen full of numbers scrolling faster than my will to read them. Basically every spreadsheet I've ever pretended to understand."
+          "caption": "A computer screen scrolling endlessly with network data like it's trying to win a typing competition against itself. Truly the digital equivalent of staring at a loading bar."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
-      "style_match": 1.0,
-      "score": 0.975
+      "style_match": 0.92,
+      "score": 0.935
     },
     {
       "task_id": "tech_2",
       "video_url": "TestVideos/tech_2.mp4",
       "style": "formal",
-      "caption": "The camera pans downward across two server racks containing stacked network hardware, patch panels, and extensive cabling within a technical equipment room.",
+      "caption": "The camera pans downward across multiple server racks containing network hardware, storage arrays, and complex cabling within a technical facility.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "The camera pans downward along tall black server racks filled with stacked networking equipment, storage units, and densely bundled cables in a data center environment."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The camera pans downward across two server racks, revealing stacked network hardware, patch panels, and extensive cabling within a technical equipment room."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The camera pans vertically across two server racks containing network equipment, servers, and connected cables in an indoor facility."
+          "caption": "The camera pans downward across multiple server racks containing network hardware, storage arrays, and complex cabling within a technical facility."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 1.0,
+      "judge_model": null,
+      "accuracy": 0.95,
       "style_match": 1.0,
-      "score": 1.0
+      "score": 0.975
     },
     {
       "task_id": "tech_2",
       "video_url": "TestVideos/tech_2.mp4",
       "style": "sarcastic",
-      "caption": "The camera slowly pans down a rack of servers and networking equipment, because nothing says thrilling cinema like watching blinking lights in a closet. Truly the peak of visual storytelling.",
+      "caption": "The camera slowly pans down racks of blinking servers and tangled wires, because nothing says thrilling cinema like watching expensive computer equipment do absolutely nothing. Truly a visual masterpiece for the ages.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A server room full of blinking lights sits completely idle for six straight frames. Riveting action — really nail-biting stuff."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The camera slowly pans down a rack of servers and networking equipment, because nothing says thrilling cinema like watching blinking lights in a closet. Truly the peak of visual storytelling."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "A slow pan across server racks blinking with blue lights. Truly the blockbuster thrill ride of our era."
+          "caption": "The camera slowly pans down racks of blinking servers and tangled wires, because nothing says thrilling cinema like watching expensive computer equipment do absolutely nothing. Truly a visual masterpiece for the ages."
         }
       ],
-      "judge_model": "qwen3p7-plus",
-      "accuracy": 1.0,
+      "judge_model": null,
+      "accuracy": 0.95,
       "style_match": 1.0,
-      "score": 1.0
+      "score": 0.975
     },
     {
       "task_id": "tech_2",
       "video_url": "TestVideos/tech_2.mp4",
       "style": "humorous_tech",
-      "caption": "The left rack is production-ready, but the right rack is pure legacy spaghetti code—someone clearly forgot to refactor the wiring before deploying to main.",
+      "caption": "The camera pans down a server rack, revealing a hardware stack where the neat top units eventually segfault into a spaghetti-code cable management disaster at the bottom.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "Server racks standing quietly in the datacenter — clearly running on smug, self-sustaining uptime and zero push notifications."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "The camera pans down a server rack, revealing a clean production environment on the left and a legacy spaghetti-code nightmare on the right. Someone clearly forgot to refactor the wiring before deploying to main."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "Server rack pull request denied: cable management still has 47 unresolved merge conflicts."
+          "caption": "The camera pans down a server rack, revealing a hardware stack where the neat top units eventually segfault into a spaghetti-code cable management disaster at the bottom."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
       "style_match": 1.0,
       "score": 0.975
@@ -1627,25 +1102,17 @@
       "task_id": "tech_2",
       "video_url": "TestVideos/tech_2.mp4",
       "style": "humorous_non_tech",
-      "caption": "Two server racks standing side-by-side, one neat and one a colorful spaghetti mess of wires. It's the tech equivalent of having one organized friend and one chaotic roommate.",
+      "caption": "A slow pan down some server racks, revealing that the top half is professional organization and the bottom half is just a cry for help.",
       "candidates": [
         {
-          "model": "minimax-m3",
-          "caption": "A wall of humming black towers stacked to the ceiling, holding the internet together one blinking light at a time."
-        },
-        {
           "model": "qwen3p7-plus",
-          "caption": "Two server racks standing side-by-side, one neat and one a colorful spaghetti mess of wires. It's the tech equivalent of having one organized friend and one chaotic roommate."
-        },
-        {
-          "model": "kimi-k2p6",
-          "caption": "The camera slowly pans down a wall of blinking server racks like it's touring a very boring nightclub. Nobody's home, but the lights are definitely on."
+          "caption": "A slow pan down some server racks, revealing that the top half is professional organization and the bottom half is just a cry for help."
         }
       ],
-      "judge_model": "qwen3p7-plus",
+      "judge_model": null,
       "accuracy": 0.95,
-      "style_match": 0.98,
-      "score": 0.965
+      "style_match": 1.0,
+      "score": 0.975
     }
   ]
 }

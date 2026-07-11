@@ -391,3 +391,196 @@
      [humorous_non_tech]  acc=0.98  style=0.95  score=0.96
         Gray clouds drifting across the sky like a moody teenager who refuses to explain what's wrong.
 ============================================================================================
+
+============================================================================================
+ TEST RUN   2026-07-11T15:40:07   |   Total time: 14m 8.2s (848.2s)
+============================================================================================
+ CAPTION PIPELINE (root config.yaml)
+   mode: single-model   |   candidate models: 1
+   model 1: accounts/fireworks/models/qwen3p7-plus
+            provider=fireworks, temp=0.4, max_tokens=4000, reasoning=none
+   judge  : (disabled — single-model mode)
+   style temperatures: {'formal': 0.1, 'sarcastic': 0.8, 'humorous_tech': 0.9, 'humorous_non_tech': 0.9}
+   frames : 7/30s, max 30, width 512px, q85, source=stream, fallback=True
+
+ SCORER (Testing/test_config.yaml)
+   model  : accounts/fireworks/models/qwen3p7-plus
+            provider=fireworks, temp=0.0, max_tokens=1000, reasoning=none, pass_frames=True
+   weights: accuracy=0.5, style_match=0.5
+   captions scored: 64
+
+ OVERALL
+   accuracy    : 0.955
+   style_match : 0.987
+   final score : 0.971
+
+ PER STYLE                     n   accuracy   style   score
+   formal                    16    0.978    1.000   0.989
+   sarcastic                 16    0.934    0.976   0.955
+   humorous_tech             16    0.956    0.987   0.971
+   humorous_non_tech         16    0.954    0.984   0.969
+
+ PER CLIP (mean score, best -> worst)
+   nature_1                 0.996
+   people_1                 0.988
+   urban_1                  0.982
+   urban_2                  0.981
+   food_1                   0.979
+   tech_1                   0.978
+   weather_2                0.978
+   people_2                 0.975
+   tech_2                   0.975
+   sports_2                 0.972
+   animals_2                0.971
+   animals_1                0.969
+   weather_1                0.968
+   food_2                   0.966
+   nature_2                 0.965
+   sports_1                 0.895
+
+ DETAIL
+  animals_1
+     [formal]  acc=0.92  style=1.00  score=0.96
+        Three dark-colored bovines traverse a grassy pasture from left to right, moving in a single file line against a backdrop of dense forest. The animals maintain a steady pace across the rocky terrain, eventually converging as they approach the right side of the field.
+     [sarcastic]  acc=0.95  style=0.98  score=0.96
+        Three wild boars trot across a field in a perfect line, proving that even nature appreciates a well-organized commute. Truly breathtaking stuff.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Three bulls execute a perfect sequential read across the pasture, maintaining strict pointer alignment with zero packet loss.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        Three wild boars march across a field in perfect single file like they're late for a very important meeting. Nature's own little parade, no permits required.
+  animals_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A leopard traverses a dry, wooded savanna, moving from left to right through sparse vegetation and leafless trees under a clear sky.
+     [sarcastic]  acc=0.95  style=1.00  score=0.97
+        A leopard strolls through the bush, graciously allowing us a fleeting glimpse between the endless barrage of out-of-focus branches. Truly a masterclass in wildlife cinematography.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        A leopard executes a stealth routine through the dry brush, but the foreground trees are throwing major rendering errors and occlusion bugs.
+     [humorous_non_tech]  acc=0.92  style=1.00  score=0.96
+        A leopard tries to play hide-and-seek behind a bush, but the camera just pans away like it has better things to do. Nature's version of being left on read.
+  food_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A chef stir-fries ingredients in a wok over an open flame, adding liquid seasonings from a bottle and a squeeze container during the cooking process.
+     [sarcastic]  acc=0.95  style=1.00  score=0.97
+        A chef stir-fries vegetables and adds sauce from a squeeze bottle, because nothing says gourmet dining like condiment application. Truly, the culinary arts have peaked.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        Chef executes a hotfix on the wok, injecting sauce dependencies directly into the production environment.
+     [humorous_non_tech]  acc=1.00  style=0.95  score=0.97
+        A chef tosses veggies in a wok before grabbing a bottle and a giant squeeze tube to add some serious flavor. That's one way to make dinner interesting.
+  food_2
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A chef in a professional kitchen sprinkles flour onto a countertop before kneading a large ball of dough.
+     [sarcastic]  acc=0.95  style=0.92  score=0.94
+        A chef dramatically dusts flour onto a ball of dough before kneading it with intense focus, proving that making bread is basically high-stakes performance art.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        A chef applies a flour patch to the dough instance before beginning a rigorous refactoring loop to optimize its structure.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        A chef gives a ball of dough a dramatic flour shower and a serious kneading, proving that even bread needs a little tough love.
+  nature_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        An aerial top-down view captures turquoise ocean waves continuously crashing against and washing over a large, dark rock formation. The white sea foam swirls around the rugged stone as the water recedes and surges in a rhythmic pattern.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        Waves crash against a rock in an aerial shot, because apparently watching water hit stone is the peak of cinematic storytelling. Truly groundbreaking stuff.
+     [humorous_tech]  acc=0.98  style=0.99  score=0.98
+        The ocean runs a brute-force DDoS attack on the rock, but the legacy hardware refuses to go offline.
+     [humorous_non_tech]  acc=1.00  style=1.00  score=1.00
+        The ocean throwing a tantrum against a rock that refuses to move. Stubbornness level: geological.
+  nature_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        An aerial panoramic view captures a large reservoir surrounded by dense pine forests and distant mountains, revealing a recreational area with a parking lot and playground nestled among the trees along the shoreline.
+     [sarcastic]  acc=0.95  style=0.92  score=0.94
+        A drone spins in a slow, majestic circle over a lake and some trees, proving once again that nature is just a giant screensaver waiting to be admired.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        The drone executes a perfect 360-degree pan over the lake, rendering the scenery with zero latency and infinite draw distance.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        The camera does a full 360-spin to show off a lake so still it's basically a giant mirror for the clouds. Nature really said, 'Let me fix my hair real quick,' and created the perfect reflection.
+  people_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        Pedestrians traverse a paved public square flanked by historic stone buildings and outdoor dining areas under a partly cloudy sky.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        Thrilling footage of tourists walking through a historic square, proving that putting one foot in front of the other is truly the peak of human entertainment.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Pedestrians navigate the cobblestone plaza with zero collision detection, executing a flawless distributed routing algorithm between the legacy stone architectures.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A crowd of tourists wanders through a historic stone square, collectively pretending they aren't looking for a place to sit down and rest their feet.
+  people_2
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A crowd of pedestrians walks through a grand, columned arcade, moving in various directions beneath a series of stone arches.
+     [sarcastic]  acc=0.98  style=0.95  score=0.96
+        A crowd of people walks through a colonnade with the architectural grace of a herd of cattle. Truly, a breathtaking display of human individuality.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Pedestrians execute a high-concurrency walk cycle through the colonnade, but the foreground rendering is clearly suffering from severe motion blur and packet loss.
+     [humorous_non_tech]  acc=0.92  style=1.00  score=0.96
+        A crowd of people shuffles through a grand hallway like they're all late for the same unimportant meeting. The guy in the fedora is definitely judging everyone's pace.
+  sports_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        An aerial view captures a soccer stadium illuminated by floodlights at dusk, with spectators filling the stands as the camera pans to reveal the surrounding mountains against a twilight sky.
+     [sarcastic]  acc=0.35  style=0.95  score=0.65
+        An aerial drone slowly pans over a soccer stadium at dusk, capturing the breathtaking spectacle of a few players running on a field while thousands of empty seats stare back in silent judgment. Truly, the pinnacle of sporting excitement.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        The stadium renders a sunset background while the floodlights maintain 100% brightness on the pitch. No lag detected in this high-resolution aerial deployment.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        The stadium lights are working overtime to keep the game going while the sun dramatically clocks out for the day. Nature's curfew is real, but floodlights don't care.
+  sports_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A wide-angle view captures a professional soccer match in progress at a large, crowded stadium under bright floodlights. Players in red and white uniforms are positioned across the green pitch while spectators fill the stands, many holding up illuminated devices.
+     [sarcastic]  acc=0.98  style=0.95  score=0.96
+        Thousands of people gather in a massive, light-drenched stadium to watch eleven men chase a ball around a field, because clearly, this is the most efficient use of human energy and electricity.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        The stadium runs a high-concurrency match with zero packet loss, while the scoreboard confirms the home team’s build is successfully deployed at 2-0.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A packed stadium glowing under dramatic spotlights while thousands of fans hold up their phone flashlights like a giant, expensive firefly convention. Meanwhile, the players are just trying to play soccer without getting dazzled by the light show.
+  tech_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A computer monitor displays the continuous output of a network ping command, showing repeated lines of text with data packet statistics including bytes, response time in milliseconds, and TTL values.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A ping command scrolls endlessly across a screen, proving that watching text repeat itself is the absolute peak of digital entertainment. Truly, a masterpiece of cinematic storytelling.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        A ping command runs an infinite loop of validation, proving the server is alive while my motivation returns a 404.
+     [humorous_non_tech]  acc=0.95  style=0.92  score=0.94
+        A computer screen scrolling endlessly with network data like it's trying to win a typing competition against itself. Truly the digital equivalent of staring at a loading bar.
+  tech_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        The camera pans downward across multiple server racks containing network hardware, storage arrays, and complex cabling within a technical facility.
+     [sarcastic]  acc=0.95  style=1.00  score=0.97
+        The camera slowly pans down racks of blinking servers and tangled wires, because nothing says thrilling cinema like watching expensive computer equipment do absolutely nothing. Truly a visual masterpiece for the ages.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        The camera pans down a server rack, revealing a hardware stack where the neat top units eventually segfault into a spaghetti-code cable management disaster at the bottom.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A slow pan down some server racks, revealing that the top half is professional organization and the bottom half is just a cry for help.
+  urban_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A time-lapse sequence captures heavy vehicular traffic flowing along a multi-lane urban arterial road at night, with illuminated commercial signage and city buildings visible in the background.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A time-lapse of city traffic at night, because watching cars blur past in an endless loop of congestion is truly the pinnacle of modern entertainment.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        City traffic runs on a legacy message queue with zero load balancing, resulting in massive packet loss on the right lane while the left executes a flawless async stream.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        City traffic moving at light speed while the other lane is just a parking lot with extra steps. The universal commute experience, beautifully blurred.
+  urban_2
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A high-angle view captures dense vehicular congestion on a multi-lane urban avenue flanked by tall brick and stone buildings under an overcast sky.
+     [sarcastic]  acc=0.98  style=0.99  score=0.98
+        Ah yes, the thrilling spectacle of gridlock, where thousands of vehicles collectively agree to go absolutely nowhere. Truly the pinnacle of modern urban efficiency.
+     [humorous_tech]  acc=0.98  style=0.95  score=0.96
+        City traffic experiencing a total deadlock—looks like someone forgot to implement a timeout on this blocking I/O operation.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A sea of trucks and taxis packed into the city street, moving with the speed of a sleepy sloth. Someone really needs to invent a flying car already.
+  weather_1
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A large cumulonimbus cloud expands vertically above a flat, rural landscape under a blue sky.
+     [sarcastic]  acc=0.95  style=0.98  score=0.96
+        A giant cloud slowly expands over a field, proving that watching paint dry was actually the more exciting option. Truly edge-of-your-seat stuff.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        A massive cumulonimbus cloud scales vertically like a runaway recursive function, consuming all available sky memory until the system crashes into a thunderstorm.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        A giant cloud puffs up like it’s trying to win a bodybuilding contest against the sky. Spoiler: it wins.
+  weather_2
+     [formal]  acc=0.98  style=1.00  score=0.99
+        Dark, dense clouds drift across an overcast sky, obscuring the lighter atmosphere beneath.
+     [sarcastic]  acc=1.00  style=0.98  score=0.99
+        Gray clouds drift across the sky in a breathtaking display of absolute nothing happening. Truly, the kind of riveting spectacle that defines a generation.
+     [humorous_tech]  acc=0.98  style=0.95  score=0.96
+        The sky is running a heavy cloud migration with zero uptime guaranteed. Looks like someone forgot to configure the CDN for clear weather.
+     [humorous_non_tech]  acc=0.98  style=0.95  score=0.96
+        The sky is serving a dramatic, gloomy look like it's about to cancel everyone's outdoor plans. Nature really knows how to hold a grudge with these clouds.
+============================================================================================
