@@ -3,24 +3,16 @@
 # Candidate caption models. ONE entry -> single-model mode (no judge). TWO OR MORE
 # entries -> ensemble: every model captions each style, then Judge produces the final one.
 Models:
+  # SINGLE-MODEL graded config: one model, no judge. Chosen because the graded run uses
+  # our own 10 RPM Fireworks key under a hard 10-min limit — an ensemble (~4 calls/caption)
+  # can't finish in time, but one call/caption (~48-60 total) fits comfortably.
+  # qwen3p7-plus scored 0.971 in local single-model testing (best of the candidates).
   - Provider: fireworks
-    Id: "accounts/fireworks/models/minimax-m3"
+    Id: "accounts/fireworks/models/qwen3p7-plus"
     BaseUrl: "https://api.fireworks.ai/inference/v1"
     Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
     MaxTokens: 4000
     ReasoningEffort: none    # none | low | medium | high — 'none' disables thinking
-  - Provider: fireworks
-    Id: "accounts/fireworks/models/qwen3p7-plus"
-    BaseUrl: "https://api.fireworks.ai/inference/v1"
-    Temperature: 0.4
-    MaxTokens: 4000
-    ReasoningEffort: none
-  - Provider: fireworks
-    Id: "accounts/fireworks/models/kimi-k2p6"
-    BaseUrl: "https://api.fireworks.ai/inference/v1"
-    Temperature: 0.4
-    MaxTokens: 4000
-    ReasoningEffort: none
   # Add more models here to enable ensembling. The API key env var is derived from
   # Provider (fireworks -> FIREWORKS_API_KEY, google -> GEMINI_API_KEY). Gemini works
   # through its OpenAI-compatible endpoint:
@@ -66,10 +58,11 @@ Client:
   MaxRetries: 3
   BackoffSeconds: 2.0
   # Global min seconds between EVERY API call (all threads share it). 0 = no throttle.
-  # Keep 0 here so the graded run (graders' key, high rate limit) runs at full speed.
-  # Fireworks caps accounts with NO payment method at 10 RPM; the local test harness
-  # (Testing/test_config.yaml) sets its own throttle for your personal key.
-  MinRequestIntervalSeconds: 0.0
+  # Track 2 graded run uses OUR OWN Fireworks key, which is capped at 10 RPM (no payment
+  # method). 6.5s spacing keeps us safely under that. Single-model = ~48-60 calls, so the
+  # run finishes in ~5-6.5 min, well within the 10-min hard limit. Set to 0 if you add a
+  # payment method (6000 RPM) and switch back to the ensemble.
+  MinRequestIntervalSeconds: 6.5
 
 Runtime:
   MaxWorkers: 6           # concurrent (task, style) captioning units

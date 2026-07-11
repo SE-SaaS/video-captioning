@@ -16,5 +16,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY config.yaml ./
 COPY Source ./Source
 
-# Reads /input/tasks.json, writes /output/results.json; FIREWORKS_API_KEY injected at runtime.
+# Track 2 injects NO env vars, so the Fireworks key must live inside the image.
+# Pass it at build time:  --build-arg FIREWORKS_API_KEY=fw_xxx
+# NOTE: this key is readable by anyone who pulls the public image (and via `docker history`).
+# Rotate/delete it right after judging.
+ARG FIREWORKS_API_KEY
+ENV FIREWORKS_API_KEY=${FIREWORKS_API_KEY}
+
+# Reads /input/tasks.json, writes /output/results.json.
 ENTRYPOINT ["python", "-m", "Source.Main"]
