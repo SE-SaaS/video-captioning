@@ -8,19 +8,19 @@ Models:
     BaseUrl: "https://api.fireworks.ai/inference/v1"
     Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
     MaxTokens: 4000
-    ReasoningEffort: medium    # none | low | medium | high
+    ReasoningEffort: none    # none | low | medium | high — 'none' disables thinking
   - Provider: fireworks
     Id: "accounts/fireworks/models/qwen3p7-plus"
     BaseUrl: "https://api.fireworks.ai/inference/v1"
     Temperature: 0.4
     MaxTokens: 4000
-    ReasoningEffort: medium
+    ReasoningEffort: none
   - Provider: fireworks
     Id: "accounts/fireworks/models/kimi-k2p6"
     BaseUrl: "https://api.fireworks.ai/inference/v1"
     Temperature: 0.4
     MaxTokens: 4000
-    ReasoningEffort: medium
+    ReasoningEffort: none
   # Add more models here to enable ensembling. The API key env var is derived from
   # Provider (fireworks -> FIREWORKS_API_KEY, google -> GEMINI_API_KEY). Gemini works
   # through its OpenAI-compatible endpoint:
@@ -39,7 +39,7 @@ Judge:
   BaseUrl: "https://api.fireworks.ai/inference/v1"
   Temperature: 0.3
   MaxTokens: 4000
-  ReasoningEffort: medium
+  ReasoningEffort: none
   PassFrames: true           # true = also send the video frames to the judge; false = captions only
 
 # Per-style sampling temperature: low = precise/factual, high = creative/varied.
@@ -65,6 +65,11 @@ Client:
   TimeoutSeconds: 30
   MaxRetries: 3
   BackoffSeconds: 2.0
+  # Global min seconds between EVERY API call (all threads share it). 0 = no throttle.
+  # Keep 0 here so the graded run (graders' key, high rate limit) runs at full speed.
+  # Fireworks caps accounts with NO payment method at 10 RPM; the local test harness
+  # (Testing/test_config.yaml) sets its own throttle for your personal key.
+  MinRequestIntervalSeconds: 0.0
 
 Runtime:
   MaxWorkers: 6           # concurrent (task, style) captioning units

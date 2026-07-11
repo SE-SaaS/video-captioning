@@ -12,6 +12,11 @@ Scorer:
   ReasoningEffort: none
   PassFrames: true         # scorer needs the video frames to judge accuracy
 
+# Global minimum seconds between EVERY Fireworks API call (shared across all threads,
+# captioning + judge + scorer). Fireworks caps accounts with NO payment method at 10 RPM;
+# keep this >= 6.0 to stay under that. Set to 0 to disable if your key has higher limits.
+MinRequestIntervalSeconds: 6.5
+
 # Weights for combining the two dimensions into a per-caption score (should sum to 1).
 Weights:
   Accuracy: 0.5

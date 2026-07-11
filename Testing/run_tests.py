@@ -8,6 +8,7 @@ import json
 import os
 import re
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from types import SimpleNamespace
@@ -24,9 +25,11 @@ from Source.Config import LoadConfig  # noqa: E402
 from Source.Main import (  # noqa: E402
     AcquireAllFrames,
     BuildClient,
+    FormatDuration,
     GenerateAllCaptions,
     LoadDotEnvIfPresent,
 )
+from Source.Pipeline.FireworksClient import SetMinRequestInterval  # noqa: E402
 from Source.Pipeline.FrameSampler import FFrameSampler  # noqa: E402
 from Source.Pipeline.SystemPrompt import BuildScorerSystemPrompt  # noqa: E402
 from Source.Pipeline.VideoDownloader import FVideoDownloader  # noqa: E402
@@ -94,9 +97,13 @@ def Mean(Values: list[float]) -> float:
 
 
 def main() -> int:
+    StartTime = time.monotonic()
     LoadDotEnvIfPresent()
     RootConfig = LoadConfig()  # captioning pipeline settings (root config.yaml)
     TestConfig = LoadTestConfig()
+    # Throttle every API call (captioning + judge + scorer) to stay under Fireworks' 10 RPM
+    # cap on keys with no payment method. Configured in Testing/test_config.yaml.
+    SetMinRequestInterval(float(TestConfig.get("MinRequestIntervalSeconds", 0.0)))
     ScorerCfg = TestConfig["Scorer"]
     Weights = TestConfig["Weights"]
     Paths = TestConfig["Paths"]
@@ -189,11 +196,11 @@ def main() -> int:
                 "score": round(WAcc * Acc + WStyle * Sm, 3),
             })
 
-    WriteReports(RootConfig, TestConfig, Records)
+    WriteReports(RootConfig, TestConfig, Records, time.monotonic() - StartTime)
     return 0
 
 
-def WriteReports(RootConfig, TestConfig, Records: list[dict]) -> None:
+def WriteReports(RootConfig, TestConfig, Records: list[dict], ElapsedSeconds: float) -> None:
     Paths = TestConfig["Paths"]
     Timestamp = datetime.now().isoformat(timespec="seconds")
 
@@ -246,24 +253,27 @@ def WriteReports(RootConfig, TestConfig, Records: list[dict]) -> None:
     # Full detail -> JSON (overwritten each run).
     with open(Paths["ReportJson"], "w", encoding="utf-8") as f:
         json.dump(
-            {"timestamp": Timestamp, "config": ConfigSnapshot, "overall": Overall,
+            {"timestamp": Timestamp, "elapsed_seconds": round(ElapsedSeconds, 1),
+             "config": ConfigSnapshot, "overall": Overall,
              "per_style": PerStyle, "per_clip": PerClip, "records": Records},
             f, ensure_ascii=False, indent=2,
         )
 
     # Human summary -> text (printed AND appended).
-    Report = FormatSummary(RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle, PerClip)
+    Report = FormatSummary(
+        RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle, PerClip, ElapsedSeconds
+    )
     print("\n" + Report)
     with open(Paths["ReportText"], "a", encoding="utf-8") as f:
         f.write("\n" + Report + "\n")
 
 
-def FormatSummary(RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle, PerClip) -> str:
+def FormatSummary(RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle, PerClip, ElapsedSeconds) -> str:
     Bar = "=" * ReportWidth
     Rule = "-" * ReportWidth
     L: list[str] = []
     L.append(Bar)
-    L.append(f" TEST RUN   {Timestamp}")
+    L.append(f" TEST RUN   {Timestamp}   |   Total time: {FormatDuration(ElapsedSeconds)}")
     L.append(Bar)
     bEnsemble = len(RootConfig.Models) > 1
     L.append(" CAPTION PIPELINE (root config.yaml)")

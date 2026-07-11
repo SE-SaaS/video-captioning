@@ -1,12 +1,13 @@
 import json
 import os
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 
 from Source.Config import FClientConfig, FConfig, LoadConfig
 from Source.Pipeline.Captioner import FCaptioner, FCaptionTrace
-from Source.Pipeline.FireworksClient import FFireworksClient
+from Source.Pipeline.FireworksClient import FFireworksClient, SetMinRequestInterval
 from Source.Pipeline.FrameSampler import FFrameSampler
 from Source.Pipeline.VideoDownloader import FVideoDownloader
 from Source.Schema.IOSchema import LoadTasks, MissingStyles, WriteResults
@@ -151,10 +152,18 @@ LocalLogPath: str = "local_test_log.txt"
 ReportWidth: int = 88
 
 
+def FormatDuration(Seconds: float) -> str:
+    if Seconds < 60:
+        return f"{Seconds:.1f}s"
+    Minutes = int(Seconds // 60)
+    return f"{Minutes}m {Seconds - Minutes * 60:.1f}s ({Seconds:.1f}s)"
+
+
 def FormatRunReport(
     Config: FConfig,
     Tasks: list[FVideoTask],
     TracesByTask: dict[str, dict[str, FCaptionTrace]],
+    ElapsedSeconds: float,
 ) -> str:
     bEnsemble: bool = len(Config.Models) > 1
     Bar: str = "=" * ReportWidth
@@ -164,7 +173,7 @@ def FormatRunReport(
     # Header: run metadata.
     Lines.append(Bar)
     Lines.append(f" VIDEO CAPTIONING RUN   {datetime.now().isoformat(timespec='seconds')}")
-    Lines.append(f" Mode: {'ENSEMBLE' if bEnsemble else 'single model'}")
+    Lines.append(f" Mode: {'ENSEMBLE' if bEnsemble else 'single model'}   |   Total time: {FormatDuration(ElapsedSeconds)}")
     Lines.append(Bar)
     Lines.append(" Models:")
     for ModelConfig in Config.Models:
@@ -247,8 +256,10 @@ def BuildClient(ModelConfig: object, ClientConfig: FClientConfig) -> FFireworksC
 
 
 def Main() -> int:
+    StartTime: float = time.monotonic()
     LoadDotEnvIfPresent()
     Config: FConfig = LoadConfig()
+    SetMinRequestInterval(Config.Client.MinRequestIntervalSeconds)  # global API-rate throttle
     Tasks: list[FVideoTask] = LoadTasks(Config.Paths.Input, Config.DefaultStyles)
 
     Sampler: FFrameSampler = FFrameSampler(
@@ -283,7 +294,7 @@ def Main() -> int:
     WriteResults(Config.Paths.Output, Results)
 
     # Nice structured record: same report goes to the terminal and the local log.
-    Report: str = FormatRunReport(Config, Tasks, TracesByTask)
+    Report: str = FormatRunReport(Config, Tasks, TracesByTask, time.monotonic() - StartTime)
     print(Report)
     LogRunLocally(Report)
     return 0

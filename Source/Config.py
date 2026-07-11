@@ -42,6 +42,7 @@ class FClientConfig:
     TimeoutSeconds: int
     MaxRetries: int
     BackoffSeconds: float
+    MinRequestIntervalSeconds: float = 0.0  # min seconds between API calls (0 = no throttle)
 
 
 @dataclass
