@@ -1,0 +1,393 @@
+
+============================================================================================
+ TEST RUN   2026-07-11T12:48:26   |   Total time: 14m 7.0s (847.0s)
+============================================================================================
+ CAPTION PIPELINE (root config.yaml)
+   mode: single-model   |   candidate models: 1
+   model 1: accounts/fireworks/models/minimax-m3
+            provider=fireworks, temp=0.4, max_tokens=4000, reasoning=none
+   judge  : (disabled — single-model mode)
+   style temperatures: {'formal': 0.1, 'sarcastic': 0.8, 'humorous_tech': 0.9, 'humorous_non_tech': 0.9}
+   frames : 7/30s, max 30, width 512px, q85, source=stream, fallback=True
+
+ SCORER (Testing/test_config.yaml)
+   model  : accounts/fireworks/models/qwen3p7-plus
+            provider=fireworks, temp=0.0, max_tokens=1000, reasoning=none, pass_frames=True
+   weights: accuracy=0.5, style_match=0.5
+   captions scored: 64
+
+ OVERALL
+   accuracy    : 0.908
+   style_match : 0.981
+   final score : 0.945
+
+ PER STYLE                     n   accuracy   style   score
+   formal                    16    0.974    1.000   0.987
+   sarcastic                 16    0.904    0.982   0.943
+   humorous_tech             16    0.902    0.982   0.942
+   humorous_non_tech         16    0.853    0.961   0.907
+
+ PER CLIP (mean score, best -> worst)
+   nature_1                 0.985
+   urban_1                  0.985
+   weather_1                0.985
+   urban_2                  0.982
+   tech_1                   0.979
+   people_2                 0.978
+   weather_2                0.974
+   sports_2                 0.971
+   food_2                   0.970
+   people_1                 0.970
+   nature_2                 0.966
+   tech_2                   0.961
+   food_1                   0.935
+   animals_2                0.900
+   animals_1                0.787
+   sports_1                 0.787
+
+ DETAIL
+  animals_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        Three dark-coated cattle walk in a line from left to right across a grassy field bordered by a dense forest.
+     [sarcastic]  acc=0.95  style=1.00  score=0.97
+        Oh wow, three majestic creatures jogging across a field in perfect formation—truly groundbreaking footage that will redefine wildlife documentary as we know it.
+     [humorous_tech]  acc=0.20  style=1.00  score=0.60
+        Three donkeys deploy across the pasture in perfect formation — synchronized processes, zero race conditions, and one of them clearly running laggy.
+     [humorous_non_tech]  acc=0.20  style=0.95  score=0.57
+        Three cows trotting across a field like they're late for a meeting they definitely did not schedule.
+  animals_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A lioness moves through a dry savanna landscape, partially obscured by the bare branches of surrounding trees and shrubs as she traverses the tall, golden grass.
+     [sarcastic]  acc=0.40  style=0.95  score=0.68
+        A leopard lounges in a tree, then casually strolls across the savanna. Truly, the most groundbreaking wildlife footage ever recorded — hold your applause.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        A cheetah executes perfect background-process mode — invisible between threads, zero CPU, definitely not responding to your calls.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A leopard lurking through the bushes like it's trying to sneak past its in-laws, and a lion doing absolutely nothing about it. Classic savannah drama.
+  food_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A chef stirs ingredients in a wok over an open flame, then dispenses sauce from a squeeze bottle into the pan while continuing to cook.
+     [sarcastic]  acc=0.95  style=0.98  score=0.96
+        A chef stir-fries some vegetables and then dramatically squeezes sauce from a bottle like it's the most groundbreaking culinary event of our time.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Chef deploys hot oil sauce via squeeze bottle — prod environment, production dinner service, no rollback permitted.
+     [humorous_non_tech]  acc=0.65  style=0.95  score=0.80
+        A chef aggressively tosses a wok like it's personally wronged them, then squirts in mysterious sauce like they're hiding family secrets. The wok didn't deserve that.
+  food_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A chef in a restaurant kitchen dusts a ball of dough with flour and kneads it on a floured countertop, while another person stirs a pan in the foreground.
+     [sarcastic]  acc=0.95  style=0.98  score=0.96
+        A man sprinkles flour on dough and kneads it like his life depends on it — groundbreaking stuff happening right before our eyes, truly.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Chef sprinkles flour on dough like a sysadmin sprinkling comments into legacy code, then kneads it hoping no merge conflicts rise.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        A chef sprinkles flour like he's seasoning a tiny snowstorm, then tackles that dough with the seriousness of a man defusing a bomb.
+  nature_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        Ocean waves continuously break against a dark rocky outcrop, viewed from directly above as white foam churns around the stone in turquoise water.
+     [sarcastic]  acc=1.00  style=0.95  score=0.97
+        Ocean waves crash against a rock, again and again, because apparently the sea has nothing better to do than repeatedly slap this one stubborn stone. Nature's most committed relationship, truly.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        Waves keep throwing exceptions against that rock while the ocean stubbornly refuses to catch them. Infinite loop detected.
+     [humorous_non_tech]  acc=1.00  style=1.00  score=1.00
+        The ocean slapping the same rock forever. Someone hold a grudge like that.
+  nature_2
+     [formal]  acc=0.92  style=1.00  score=0.96
+        An aerial camera pans across a forested landscape, revealing a calm lake bordered by pine trees, a dirt path, and a small parking area, before sweeping over the water to show distant mountains reflected on the surface.
+     [sarcastic]  acc=0.98  style=0.95  score=0.96
+        A drone pans over a serene lake surrounded by pine trees and mountains. Groundbreaking stuff — really pushing the boundaries of "scenery exists."
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        The camera slowly rotates 360° over a forested lake, as if Mother Nature is running a panoramic render engine to prove she's still got the best graphics card.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        The lake is showing off its mirror skills while the trees pretend they don't notice. Nature really said "let me take a selfie" today.
+  people_1
+     [formal]  acc=0.98  style=1.00  score=0.99
+        Numerous pedestrians traverse a paved pedestrian street lined with historic stone buildings, shops, and outdoor cafes under a clear blue sky.
+     [sarcastic]  acc=0.98  style=1.00  score=0.99
+        A crowd shuffles through a cobblestone plaza beneath a flawless blue sky — groundbreaking stuff, really, watching people walk.
+     [humorous_tech]  acc=0.98  style=0.95  score=0.96
+        Pedestrians wandering a cobblestone plaza, each one running their own unsynchronized cron job through the historic street.
+     [humorous_non_tech]  acc=0.95  style=0.92  score=0.94
+        A bustling plaza where everyone is walking in every direction, and somehow nobody crashes — pure tourist chaos.
+  people_2
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A dense crowd of pedestrians walks through a covered colonnade featuring stone arches and columns, with individuals moving in both directions along the passageway.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A crowd shuffles through a grand stone colonnade, moving at the thrilling pace of, well, a crowd shuffling through a colonnade. Riveting stuff.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        A crowd bottlenecks through a colonnade like threads stuck in an infinite loop, all waiting for someone to call pthread_exit.
+     [humorous_non_tech]  acc=0.92  style=0.95  score=0.94
+        A crowded walkway full of people moving in every direction, where the only person standing still is somehow still in everyone else's way.
+  sports_1
+     [formal]  acc=0.95  style=1.00  score=0.97
+        An aerial view captures a soccer stadium illuminated by floodlights as the sky transitions from night to dawn, with spectators visible in the stands and players positioned on the field.
+     [sarcastic]  acc=0.30  style=0.95  score=0.62
+        Aerial shots of an empty soccer stadium at sunset—because nothing says "excitement" like a time-lapse of grass growing under stadium lights.
+     [humorous_tech]  acc=0.85  style=0.95  score=0.90
+        Stadium lights dim as the sky transitions from night to sunset — looks like the venue's running on a really aggressive dark mode toggle, and the fans are still pushing through the render.
+     [humorous_non_tech]  acc=0.35  style=0.95  score=0.65
+        A soccer stadium sits empty and ready all night long, waiting for fans who clearly had better things to do. Meanwhile, the sky overhead throws a gorgeous sunset show that nobody bought tickets for.
+  sports_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A football match is played in a large, illuminated stadium filled with spectators, with players in red and white kits competing on the green pitch under bright floodlights.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A soccer match unfolds in a massive stadium under dazzling lights, because nothing says "casual Friday night" like fifty thousand people watching two teams chase a ball around.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        50,000 phones at full brightness — the stadium just DDoS'd the night sky. Match still loading.
+
+(Score 2–0 — someone's running an early commit.)
+     [humorous_non_tech]  acc=0.95  style=0.92  score=0.94
+        A packed stadium watches two teams chase one ball around like it's the last snack at a party. Twenty-two players, one tiny sphere, and somehow it's never lost in the lights.
+  tech_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A computer terminal displays a continuous stream of network ping responses, showing sequential data packets with consistent byte sizes and TTL values alongside varying response times in milliseconds.
+     [sarcastic]  acc=0.95  style=1.00  score=0.97
+        Oh look, a screen endlessly spamming "bytes=32 tiempo=ms TTL=60" — truly the most gripping thriller of our time.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        A ping command scrolls endlessly down the terminal — clearly someone forgot to add `Ctrl+C` to their hotkeys. Infinite loop deployed to production.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        A computer screen scrolling endless "bytes=32 tiempo=ms" lines like a robot's diary nobody asked to read.
+  tech_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        The camera pans downward along tall black server racks filled with stacked networking equipment, hard drives, and densely bundled cables within a data center facility.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A server room stands completely motionless and devoid of any human activity. Wow, groundbreaking cinema — truly the edge of my seat here.
+     [humorous_tech]  acc=0.95  style=0.92  score=0.94
+        A server rack stands quietly in the corner, running a tight loop of "be quiet, serve requests, don't crash." Production environment, zero merges allowed.
+     [humorous_non_tech]  acc=0.95  style=0.92  score=0.94
+        A server room standing completely still — the most well-behaved equipment you'll ever meet.
+  urban_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A time-lapse view captures heavy vehicular traffic flowing through a multi-lane urban intersection at night, with illuminated commercial signage and streetlights lining the roadway.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        Oh look, a timelapse of cars inching forward in a neon-lit city street. Because watching brake lights blink at warp speed is exactly the kind of breathtaking spectacle humanity needed.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        Production traffic in rush hour hits 99.9% CPU utilization — every lane is thrashing, and the city has clearly forgotten to close its threads.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A river of brake lights stretching into forever. Everyone going somewhere, nobody arriving — just vibes and traffic.
+  urban_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A congested multi-lane city street is filled with stationary vehicles, including cars, taxis, and trucks, flanked by tall residential and commercial buildings under an overcast sky.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A camera gazes down at a Manhattan street choked with traffic under a gloomy sky. Groundbreaking footage — really captures the electrifying thrill of cars not moving.
+     [humorous_tech]  acc=0.98  style=1.00  score=0.99
+        Rush hour traffic hits its daily bottleneck — thousands of threads competing for the same mutex, zero progress committed. Someone please deploy a carpool merge request.
+     [humorous_non_tech]  acc=0.98  style=0.95  score=0.96
+        A whole city just sitting in traffic together, bonding over the shared dream of getting home before dinner.
+  weather_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A large cumulonimbus cloud formation develops and expands across a blue sky above a flat landscape, with a utility pole visible in the foreground.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A massive cumulus cloud towers over a lone lamppost and empty field. Groundbreaking meteorological content, truly.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        A massive cloud deployment is rolling in over the field — production push complete, looks like the weather team forgot to write the rollback script.
+     [humorous_non_tech]  acc=1.00  style=0.95  score=0.97
+        A massive cloud towers over a tiny light pole like it's peacocking for the entire sky. Humbling.
+  weather_2
+     [formal]  acc=0.98  style=1.00  score=0.99
+        Dense gray cloud formations drift slowly across an overcast sky, with subtle variations in light and shadow visible through the cloud cover.
+     [sarcastic]  acc=1.00  style=0.95  score=0.97
+        Oh look, clouds are doing their thing again. Truly a groundbreaking episode of "Sky."
+     [humorous_tech]  acc=0.98  style=0.95  score=0.96
+        Clouds rolling in overhead — looks like the sky is running a background process with no shutdown option. 100% CPU usage, zero sunshine allocated.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        The sky is doing its best moody impression, taking its sweet time deciding if it wants to cry or just brood dramatically. Classic overthinker.
+============================================================================================
+
+============================================================================================
+ TEST RUN   2026-07-11T14:43:38   |   Total time: 34m 52.5s (2092.5s)
+============================================================================================
+ CAPTION PIPELINE (root config.yaml)
+   mode: ensemble   |   candidate models: 3
+   model 1: accounts/fireworks/models/minimax-m3
+            provider=fireworks, temp=0.4, max_tokens=4000, reasoning=none
+   model 2: accounts/fireworks/models/qwen3p7-plus
+            provider=fireworks, temp=0.4, max_tokens=4000, reasoning=none
+   model 3: accounts/fireworks/models/kimi-k2p6
+            provider=fireworks, temp=0.4, max_tokens=4000, reasoning=none
+   judge  : accounts/fireworks/models/qwen3p7-plus
+            provider=fireworks, temp=0.3, max_tokens=4000, reasoning=none, pass_frames=True
+   style temperatures: {'formal': 0.1, 'sarcastic': 0.8, 'humorous_tech': 0.9, 'humorous_non_tech': 0.9}
+   frames : 7/30s, max 30, width 512px, q85, source=stream, fallback=True
+
+ SCORER (Testing/test_config.yaml)
+   model  : accounts/fireworks/models/qwen3p7-plus
+            provider=fireworks, temp=0.0, max_tokens=1000, reasoning=none, pass_frames=True
+   weights: accuracy=0.5, style_match=0.5
+   captions scored: 64
+
+ OVERALL
+   accuracy    : 0.967
+   style_match : 0.990
+   final score : 0.979
+
+ PER STYLE                     n   accuracy   style   score
+   formal                    16    0.986    1.000   0.993
+   sarcastic                 16    0.975    0.981   0.978
+   humorous_tech             16    0.952    0.986   0.969
+   humorous_non_tech         16    0.957    0.992   0.974
+
+ PER CLIP (mean score, best -> worst)
+   nature_1                 0.990
+   weather_1                0.989
+   people_1                 0.988
+   sports_2                 0.988
+   tech_1                   0.985
+   tech_2                   0.985
+   weather_2                0.980
+   sports_1                 0.979
+   urban_1                  0.979
+   urban_2                  0.976
+   people_2                 0.974
+   animals_2                0.972
+   food_2                   0.972
+   food_1                   0.971
+   animals_1                0.965
+   nature_2                 0.964
+
+ DETAIL
+  animals_1
+     [formal]  acc=0.95  style=1.00  score=0.97
+        Three dark-coated cattle traverse a rocky, grassy pasture in single file from left to right against a backdrop of dense forest.
+     [sarcastic]  acc=0.95  style=0.92  score=0.94
+        Three wild boars trot across a field in perfect single file, proving that even nature appreciates a well-organized commute. Truly breathtaking wildlife cinematography.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Three bulls execute a perfect sequential scan across the pasture, maintaining strict thread safety with zero race conditions.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        Three wildebeest trot across a field in perfect single file, like they're late for a very important meeting that started five minutes ago.
+  animals_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A leopard traverses a dry, wooded savanna, moving through sparse vegetation and leafless trees under a clear sky.
+     [sarcastic]  acc=0.95  style=0.98  score=0.96
+        A leopard stalks a warthog through a dense thicket of out-of-focus branches, delivering a masterclass in wildlife cinematography where the foreground obstruction is clearly the main character.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        A leopard executes a stealth protocol through the brush, successfully bypassing the foreground firewall of tangled branches.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A leopard playing hide-and-seek behind a forest of bare branches, briefly revealing its spotted coat before vanishing. Nature's ultimate master of disguise just showing off for the camera.
+  food_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A chef stir-fries ingredients in a wok over an open flame, adding liquid seasonings from a bottle and a squeeze container during the cooking process.
+     [sarcastic]  acc=0.92  style=0.95  score=0.94
+        A chef dramatically pours mystery liquids from bottles into a flaming wok, because apparently, this is the pinnacle of culinary innovation we’ve all been waiting for.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Chef injects sauce dependencies directly into the running wok process — hotfix deployed to production with zero downtime.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A chef wielding a giant ladle like a scepter finally adds the secret sauce — straight from a giant squeeze bottle, because stir-fry drama needs a finale.
+  food_2
+     [formal]  acc=0.95  style=1.00  score=0.97
+        A chef in a professional kitchen sprinkles flour over a ball of dough on a marble counter and kneads it, while another person tends to a pan in the foreground.
+     [sarcastic]  acc=0.95  style=0.98  score=0.96
+        A chef sprinkles flour and kneads dough with the intense focus of a brain surgeon, proving that making bread is definitely the most high-stakes operation in the kitchen.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Chef injects flour dependencies into the dough object before running a manual kneading algorithm to refactor its shape.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A chef showers dough with flour like he's blessing it, then kneads it with the seriousness of someone defusing a bomb. The bread doesn't know how lucky it is.
+  nature_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        An aerial top-down view captures turquoise ocean waves continuously crashing against a large, dark rock formation, with white sea foam spreading across the stone and swirling in the surrounding water.
+     [sarcastic]  acc=1.00  style=0.95  score=0.97
+        An aerial view of waves crashing against a rock, because apparently we needed a drone to confirm that water still goes splash.
+     [humorous_tech]  acc=0.98  style=0.99  score=0.98
+        Ocean waves execute a relentless DDoS attack on the rock, but the legacy hardware maintains 100% uptime with zero downtime scheduled.
+     [humorous_non_tech]  acc=1.00  style=1.00  score=1.00
+        The ocean slapping the same rock forever. Someone hold a grudge like that.
+  nature_2
+     [formal]  acc=0.96  style=1.00  score=0.98
+        An aerial panoramic view captures a large reservoir surrounded by dense pine forests and distant mountains, revealing a recreational area with a parking lot and playground nestled among the trees along the shoreline.
+     [sarcastic]  acc=0.95  style=0.98  score=0.96
+        A drone pans 360 degrees over a lake and some trees, proving that if you spin in a circle long enough, it’s just more water and dirt. Truly groundbreaking cinematography.
+     [humorous_tech]  acc=0.95  style=0.92  score=0.94
+        The drone executes a flawless 360° pan, rendering the lake's mirror reflection with zero latency and perfect symmetry.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        The camera does a full 360 spin like it’s looking for its keys, while the lake just sits there smooth as a freshly ironed shirt. Nature really said, "Let me fix your hair for you."
+  people_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        Numerous pedestrians traverse a paved public square flanked by historic stone buildings and outdoor dining areas under a partly cloudy sky.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        Tourists wander through a historic stone plaza, absolutely riveted by the groundbreaking spectacle of other tourists wandering through a historic stone plaza.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Pedestrians navigate the plaza in a highly concurrent loop with zero merge conflicts, though production traffic is definitely exceeding the thread pool's max capacity.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        Tourists wandering through a historic square with the confidence of people who definitely aren't lost. Probably.
+  people_2
+     [formal]  acc=0.98  style=1.00  score=0.99
+        Pedestrians traverse a covered colonnade defined by stone columns and arches, moving in both directions toward and away from a large arched opening at the far end.
+     [sarcastic]  acc=0.95  style=0.98  score=0.96
+        A crowd shuffles through a grand colonnade with the thrilling pace and excitement of a DMV waiting room. Truly a breathtaking display of human locomotion.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        Pedestrians stream through the colonnade like a congested data pipeline, with foreground packets suffering severe motion blur and packet loss.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A crowd shuffles through a grand hallway like a slow-motion game of human Tetris, everyone strictly avoiding eye contact to protect their personal bubble.
+  sports_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        An aerial view captures a soccer stadium illuminated by floodlights with spectators in the stands, as the camera pulls back to reveal distant mountains against a twilight sky transitioning from orange to dark blue.
+     [sarcastic]  acc=0.95  style=1.00  score=0.97
+        An aerial drone circles a soccer stadium as the sky transitions from night to sunset, capturing the thrilling spectacle of a field that remains completely unchanged. Truly groundbreaking cinematography—next they'll show us grass growing in real time.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Stadium floodlights execute a seamless fade-in as the sky transitions from day mode to night theme without a single frame drop.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        The stadium lights are working overtime as the sun makes a dramatic exit, proving nature’s special effects budget is truly unlimited.
+  sports_2
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A wide-angle view captures a professional soccer match in progress at a large, illuminated stadium filled with spectators, where players in red and white kits compete on the pitch as the scoreboard displays a 2-0 score.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        Thousands of fans pack a stadium under dramatic floodlights to watch twenty-two people chase a ball while the scoreboard confirms the home team is winning 2-0. Truly the pinnacle of human achievement.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        Stadium lights maxed out while 22 players stress-test the field's render engine at 60fps, with the scoreboard hardcoding a 2-0 victory condition.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        Fifty thousand people paid good money to watch 22 grown men chase a ball around a lawn. And honestly? Same.
+  tech_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A computer monitor displays a continuous stream of network ping command output, showing data packets with 32 bytes, a TTL of 60, and response times measured in milliseconds.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A terminal endlessly scrolls identical ping replies. Truly edge-of-your-seat entertainment.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        A terminal executes a relentless ping loop with zero packet loss—looks like someone found infinite uptime and forgot to write the kill switch.
+     [humorous_non_tech]  acc=0.95  style=1.00  score=0.97
+        A computer screaming "I'm here!" into the digital void over and over again. It’s basically yelling "Marco!" to an empty pool, hoping for a "Polo."
+  tech_2
+     [formal]  acc=1.00  style=1.00  score=1.00
+        The camera pans downward across two server racks containing stacked network hardware, patch panels, and extensive cabling within a technical equipment room.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        The camera slowly pans down a rack of servers and networking equipment, because nothing says thrilling cinema like watching blinking lights in a closet. Truly the peak of visual storytelling.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        The left rack is production-ready, but the right rack is pure legacy spaghetti code—someone clearly forgot to refactor the wiring before deploying to main.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        Two server racks standing side-by-side, one neat and one a colorful spaghetti mess of wires. It's the tech equivalent of having one organized friend and one chaotic roommate.
+  urban_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A time-lapse captures dense vehicular traffic flowing through a multi-lane urban intersection at night, characterized by streaking light trails from moving vehicles and illuminated commercial signage lining the roadway.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        Ah yes, a time-lapse of city traffic, because watching cars blur into streaks of light is clearly the peak of cinematic storytelling.
+     [humorous_tech]  acc=0.92  style=0.98  score=0.95
+        City traffic runs on legacy code with zero optimization, causing a massive memory leak in the right lane while the left thread executes at warp speed.
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        Every driver here is convinced their lane is the fast one. Spoiler: it’s just a very bright, very slow parking lot.
+  urban_2
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A high-angle view captures dense vehicular congestion on a multi-lane urban avenue flanked by tall brick and stone buildings under an overcast sky.
+     [sarcastic]  acc=0.98  style=0.95  score=0.96
+        A New York City street sits completely gridlocked under a moody gray sky. Truly a groundbreaking display of urban innovation—nothing says "progress" like thousands of vehicles going absolutely nowhere.
+     [humorous_tech]  acc=0.95  style=1.00  score=0.97
+        A New York traffic jam where every car is a thread stuck in deadlock, and nobody called sem_post().
+     [humorous_non_tech]  acc=0.95  style=0.98  score=0.96
+        A traffic jam so dense it looks like everyone simultaneously remembered they left the stove on. New York, baby.
+  weather_1
+     [formal]  acc=1.00  style=1.00  score=1.00
+        A large cumulonimbus cloud formation expands across a blue sky above a flat, rural landscape, with a utility pole visible in the foreground.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        A massive cumulus cloud towers over a lone utility pole in a flat field. Truly the pinnacle of cinematic achievement, I am visibly shaken.
+     [humorous_tech]  acc=0.95  style=0.98  score=0.96
+        A massive cumulonimbus cloud scales vertically until it hits the atmosphere's memory limit—someone definitely forgot to set a max-height on this deployment.
+     [humorous_non_tech]  acc=0.98  style=1.00  score=0.99
+        A giant cloud puffs itself up like it's trying to win a bodybuilding competition against the sky. The power pole down there is just watching, completely unimpressed.
+  weather_2
+     [formal]  acc=0.98  style=1.00  score=0.99
+        Dense gray clouds drift across an overcast sky, gradually shifting and changing formation as they move.
+     [sarcastic]  acc=1.00  style=1.00  score=1.00
+        Gray clouds drift across the sky in a breathtaking display of meteorological excitement. Truly, the kind of high-stakes drama we all live for.
+     [humorous_tech]  acc=0.98  style=0.95  score=0.96
+        The sky is running a heavy cloud migration with zero visibility into the production environment. Looks like someone forgot to configure the load balancer for sunshine.
+     [humorous_non_tech]  acc=0.98  style=0.95  score=0.96
+        Gray clouds drifting across the sky like a moody teenager who refuses to explain what's wrong.
+============================================================================================
