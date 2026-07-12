@@ -15,25 +15,23 @@ Models:
     Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
     MaxTokens: 8000
     ReasoningEffort: low  # none | low | medium | high — 'none' disables thinking
-  - Provider: fireworks
-    Id: "accounts/fireworks/models/qwen3p7-plus"
-    BaseUrl: "https://api.fireworks.ai/inference/v1"
-    Temperature: 0.4
-    # Reasoning is ON (medium): qwen emits its chain-of-thought into a SEPARATE
-    # reasoning_content field (we read only 'content', so the caption stays clean).
-    # But reasoning burns lots of tokens BEFORE the answer — with too small a budget the
-    # answer gets truncated to empty. Give it plenty of headroom.
-    MaxTokens: 8000
-    ReasoningEffort: none
+  # Lane B (run sequentially, in parallel with Lane A above): flash first, then qwen.
   - Provider: google
     # Gemini via its OpenAI-compatible endpoint. Verified: vision + reasoning_effort both
-    # work; key comes from GEMINI_API_KEY (derived from Provider). Flash is fast, so
-    # reasoning stays 'none' to keep this call well under the 30s per-request budget.
+    # work; key comes from GEMINI_API_KEY (derived from Provider). Flash is fast.
     Id: "gemini-3.5-flash"
     BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
     Temperature: 0.4
     MaxTokens: 8000
     ReasoningEffort: low
+  - Provider: fireworks
+    Id: "accounts/fireworks/models/qwen3p7-plus"
+    BaseUrl: "https://api.fireworks.ai/inference/v1"
+    Temperature: 0.4
+    # qwen emits chain-of-thought into a SEPARATE reasoning_content field (we read only
+    # 'content'), but reasoning shares the max_tokens budget — keep headroom.
+    MaxTokens: 8000
+    ReasoningEffort: none
   # Add more models here to enable ensembling. The API key env var is derived from
   # Provider (fireworks -> FIREWORKS_API_KEY, google -> GEMINI_API_KEY).
 

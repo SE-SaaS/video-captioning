@@ -47,14 +47,20 @@ class FCaptioner:
             Caption: str = Client.Complete(SystemPrompt, UserPrompt, Frames, Temperature)
             return (Client.ModelId, Caption, time.monotonic() - CallStart)
 
-        # Run the ensemble candidates CONCURRENTLY so one caption's time is max(models) + judge
-        # rather than the sum — keeps each final caption well under the per-request budget.
-        # (map preserves model order; if any candidate errors, it propagates and the unit fails.)
-        if len(self.Clients) == 1:
-            Results: list[tuple[str, str, float]] = [RunClient(self.Clients[0])]
+        def RunChain(Clients: list[FFireworksClient]) -> list[tuple[str, str, float]]:
+            return [RunClient(Client) for Client in Clients]
+
+        # Two-lane execution: the first (slowest) model runs alone in Lane A, while the
+        # remaining models run one-after-another in Lane B — the two lanes in parallel. So a
+        # caption takes max(lane A, lane B) + judge, but only 2 extra threads exist at a time
+        # (safe under a tight PID/thread limit). Order is preserved: A's model, then B's.
+        if len(self.Clients) <= 1:
+            Results: list[tuple[str, str, float]] = RunChain(self.Clients)
         else:
-            with ThreadPoolExecutor(max_workers=len(self.Clients)) as Executor:
-                Results = list(Executor.map(RunClient, self.Clients))
+            with ThreadPoolExecutor(max_workers=2) as Executor:
+                LaneA = Executor.submit(RunChain, self.Clients[:1])
+                LaneB = Executor.submit(RunChain, self.Clients[1:])
+                Results = LaneA.result() + LaneB.result()
 
         Candidates: list[tuple[str, str]] = [(Mid, Cap) for Mid, Cap, _ in Results]
         CandidateDurations: list[float] = [Dur for _, _, Dur in Results]
