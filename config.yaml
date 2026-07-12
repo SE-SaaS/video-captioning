@@ -6,32 +6,29 @@ Models:
   # ENSEMBLE graded config: 3 VLMs caption each style, then the Judge merges the best.
   # Our paid key (6000 RPM) has no rate constraint, so the full run finishes in ~2-3 min,
   # well under the 10-min limit. Highest-quality setup.
-  - Provider: google
-    # Gemini Pro (preview) via the OpenAI-compatible endpoint. Verified: valid ID + vision.
-    # NOTE: unlike flash, Pro's reasoning tokens count against max_tokens, so give big
-    # headroom or the caption truncates. Pro is stronger but pricier/slower than flash.
-    Id: "gemini-3.1-pro-preview"
-    BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
+  # Lane A (runs ALONE, in parallel with Lane B below): qwen — the slowest model, isolated.
+  - Provider: fireworks
+    Id: "accounts/fireworks/models/qwen3p7-plus"
+    BaseUrl: "https://api.fireworks.ai/inference/v1"
     Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
+    # qwen emits chain-of-thought into a SEPARATE reasoning_content field (we read only
+    # 'content'), but reasoning shares the max_tokens budget — keep headroom.
     MaxTokens: 8000
-    ReasoningEffort: low  # none | low | medium | high — 'none' disables thinking
-  # Lane B (run sequentially, in parallel with Lane A above): flash first, then qwen.
+    ReasoningEffort: low
+  # Lane B (run sequentially, in parallel with Lane A above): minimax then flash (both fast).
+  - Provider: fireworks
+    Id: "accounts/fireworks/models/minimax-m3"
+    BaseUrl: "https://api.fireworks.ai/inference/v1"
+    Temperature: 0.4
+    MaxTokens: 8000
+    ReasoningEffort: low
   - Provider: google
-    # Gemini via its OpenAI-compatible endpoint. Verified: vision + reasoning_effort both
-    # work; key comes from GEMINI_API_KEY (derived from Provider). Flash is fast.
+    # Gemini via its OpenAI-compatible endpoint. Flash is fast.
     Id: "gemini-3.5-flash"
     BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
     Temperature: 0.4
     MaxTokens: 8000
     ReasoningEffort: low
-  - Provider: fireworks
-    Id: "accounts/fireworks/models/qwen3p7-plus"
-    BaseUrl: "https://api.fireworks.ai/inference/v1"
-    Temperature: 0.4
-    # qwen emits chain-of-thought into a SEPARATE reasoning_content field (we read only
-    # 'content'), but reasoning shares the max_tokens budget — keep headroom.
-    MaxTokens: 8000
-    ReasoningEffort: none
   # Add more models here to enable ensembling. The API key env var is derived from
   # Provider (fireworks -> FIREWORKS_API_KEY, google -> GEMINI_API_KEY).
 
@@ -39,11 +36,11 @@ Models:
 # or merges their best parts into one final caption per style.
 Judge:
   Provider: google
-  Id: "gemini-3.1-pro-preview"
+  Id: "gemini-3.5-flash"
   BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
   Temperature: 0.3
-  MaxTokens: 5000          # gemini keeps thinking tokens separate, so no big headroom needed
-  ReasoningEffort: medium     # a little reasoning helps merging; gemini keeps traces internal (no leak)
+  MaxTokens: 4000          # gemini keeps thinking tokens separate, so no big headroom needed
+  ReasoningEffort: medium        # flash is fast; keeps reasoning traces internal (no leak)
   PassFrames: true           # true = also send the video frames to the judge; false = captions only
 
 # Per-style sampling temperature: low = precise/factual, high = creative/varied.

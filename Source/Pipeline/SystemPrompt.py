@@ -23,40 +23,28 @@ styles_definitions = {
     ),
 }
 
-# Examples span varied content (urban, nature, animals, people/sports, food, weather, tech)
-# so the TONE transfers across subjects instead of anchoring to one kind of clip.
+# A few simple, illustrative tone examples spanning varied content. They are ONLY meant to
+# convey the flavor of each style — the model is told not to copy their wording or subjects.
 few_shot_examples = {
     "formal": [
         "A pedestrian crosses a busy intersection as vehicles wait at the signal.",
-        "A cyclist ascends a winding mountain road bordered by pine forest.",
         "A herd of wildebeests moves across open grassland toward a distant treeline.",
         "A chef plates a garnished dish beneath warm kitchen lighting.",
-        "Storm clouds gather over a coastal city as rain begins to fall.",
-        "A developer reviews code on a dual-monitor workstation.",
     ],
     "sarcastic": [
         "A man crosses the street. Truly the pinnacle of human achievement.",
-        "A cyclist grinds up a mountain road. Nature's gym membership, fully utilized.",
         "Wildebeests wander across a field. Edge-of-your-seat wildlife drama, clearly.",
         "A chef garnishes a plate. Because the parsley really makes or breaks it.",
-        "Storm clouds roll over the city. Weather doing its one job again.",
-        "Someone stares at code on two monitors. Peak productivity, allegedly.",
     ],
     "humorous_tech": [
         "A pedestrian crosses the road with zero merge conflicts. Clean commit.",
-        "A cyclist climbs a mountain road on max effort — no caching this uphill.",
         "A herd of wildebeests migrates in perfect load-balanced formation.",
         "A chef renders a plated dish in full 4K garnish resolution.",
-        "Storm clouds roll in, throwing a weather exception over the city.",
-        "A developer debugs on two monitors, hunting a null pointer in the wild.",
     ],
     "humorous_non_tech": [
         "A guy crosses the street like he owns it. Bold move, king.",
-        "A cyclist attacking a mountain like the hill personally insulted him.",
         "Wildebeests strolling across the plain like they own the whole savanna.",
         "A chef garnishing a plate like it's about to be knighted.",
-        "Storm clouds rolling in like they heard there was a picnic.",
-        "A guy staring at two screens like they owe him money.",
     ],
 }
 
@@ -79,7 +67,7 @@ Then write ONE caption in the "{style}" style:
 
 Style = {style}: {style_definition}
 
-Examples of this style:
+A few simple examples of this tone, given only to illustrate the style — do NOT copy their wording, structure, or subjects; write freshly for THIS video:
 {examples}
 """
 
@@ -93,28 +81,23 @@ def BuildSystemPrompt(style: str) -> str:
     )
 
 
-# Judge prompt: used only in ensemble mode. The judge is the ensemble's LEAD captioner —
-# it sees the frames itself and treats the candidate captions as strong reference drafts,
-# free to synthesize and add frame-supported detail to produce the single best final caption.
+# Judge prompt: used only in ensemble mode. The judge is CONSERVATIVE — it picks the best
+# candidate or merges their best parts, verifies against the frames, and adds no new detail.
 judge_system_prompt = """
-You are the LEAD captioner and judge of a video-captioning ensemble. Several models each drafted a candidate caption for the SAME short video clip, all targeting the "{style}" style — and you are ALSO shown the video frames yourself. Treat the candidates as strong reference drafts, NOT as a limit on what you may write.
+You are the judge in a video-captioning ensemble. Several models each wrote a candidate caption for the SAME short video clip, all targeting the "{style}" style, and you are also shown the video frames.
 
-Your job: produce the single BEST possible caption in the "{style}" style. It is scored equally on accuracy (faithfulness to the footage) and style match (tone), so both must be excellent.
+Your job: produce the single BEST final caption in the "{style}" style. It is scored equally on accuracy (faithfulness to the footage) and style match (tone).
 
-First, ground yourself in the frames (think this through before writing):
-- Read the clip as a whole: the main subject(s), the SINGLE most salient action or event, the setting, and how it changes over time.
-- Weigh each candidate against the frames: what did each get right, what did each miss, and did any invent or misread something?
-
-Then write the final caption:
-- Synthesize freely. Combine the best observations and phrasing across the candidates, and feel free to ADD an accurate detail they all missed or a sharper, better-styled turn of phrase of your own — you are not confined to what the candidates happened to say. Aim to beat every individual draft.
-- Accuracy is the hard floor: include ONLY what the frames actually support. Drop any candidate content that is invented, vague, or wrong, and never add a detail you cannot see in the frames.
-- Nail the tone: the final caption must be genuinely, strongly on-style — sharpen the wit or precision past the drafts where you can. Even in a humorous or sarcastic tone, keep the real subject and main action unmistakably clear.
-- Capture the clip's main point or arc, prefer the specific over the generic, one or two sentences, English only.
+How to decide:
+- Pick the strongest candidate as-is, OR merge the best parts of several into one caption. You may lightly polish the wording for fluency, but add NO detail that is not already in a candidate or clearly visible in the frames. Do not embellish or invent.
+- Accuracy first: verify every detail against the frames and drop anything not visible. Discard candidate content that is invented, vague, or wrong. Prefer the candidate that is both specific and correct.
+- Then match the requested tone exactly — the final caption must be genuinely on-style, not just accurate. Even in a humorous or sarcastic tone, keep the real subject and main action unmistakably clear.
+- One or two sentences. English only.
 - Output ONLY the final caption text — no labels, quotes, ranking, or explanation.
 
 Style = {style}: {style_definition}
 
-Examples of this style:
+A few simple examples of this tone, given only to illustrate the style — do NOT copy their wording, structure, or subjects:
 {examples}
 """
 
