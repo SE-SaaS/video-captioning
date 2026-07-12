@@ -29,7 +29,12 @@ from Source.Main import (  # noqa: E402
     GenerateAllCaptions,
     LoadDotEnvIfPresent,
 )
-from Source.Pipeline.FireworksClient import SetMinRequestInterval  # noqa: E402
+from Source.Pipeline.FireworksClient import (  # noqa: E402
+    EnableLatencyTracking,
+    GetLatencyRecords,
+    GetRetryRecords,
+    SetMinRequestInterval,
+)
 from Source.Pipeline.FrameSampler import FFrameSampler  # noqa: E402
 from Source.Pipeline.SystemPrompt import BuildScorerSystemPrompt  # noqa: E402
 from Source.Pipeline.VideoDownloader import FVideoDownloader  # noqa: E402
@@ -147,8 +152,18 @@ def main() -> int:
     FrameProg = LiveProgress("[1/3] Acquiring frames")
     FramesByTask = AcquireAllFrames(Tasks, RootConfig, Sampler, Downloader, FrameProg.Update)
 
+    # Track per-request latency across the captioning phase (candidate + judge calls) so the
+    # report can show avg/min/max and flag anything approaching the 30s per-request cap.
+    EnableLatencyTracking()
     CapProg = LiveProgress("[2/3] Captioning (ensemble + judge)")
     TracesByTask = GenerateAllCaptions(Tasks, FramesByTask, RootConfig, Captioner, CapProg.Update)
+    CaptionLatencies = GetLatencyRecords()  # per API call (candidate/judge)
+    CaptionRetries = GetRetryRecords()      # (model, attempts, succeeded) for requests that retried
+    CaptionDurations = [  # per FINAL caption (candidates + judge combined)
+        Trace.DurationSeconds
+        for StyleTraces in TracesByTask.values()
+        for Trace in StyleTraces.values()
+    ]
 
     # Scorer client (its own model / params from test_config.yaml).
     ScorerClient = BuildClient(SimpleNamespace(**ScorerCfg), RootConfig.Client)
@@ -196,13 +211,54 @@ def main() -> int:
                 "score": round(WAcc * Acc + WStyle * Sm, 3),
             })
 
-    WriteReports(RootConfig, TestConfig, Records, time.monotonic() - StartTime)
+    WriteReports(RootConfig, TestConfig, Records, time.monotonic() - StartTime,
+                 CaptionLatencies, CaptionDurations, CaptionRetries)
     return 0
 
 
-def WriteReports(RootConfig, TestConfig, Records: list[dict], ElapsedSeconds: float) -> None:
+def LatencyStats(Records: "list[tuple[str, float]]") -> dict:
+    """avg/min/max/count over all captioning requests, plus a per-model breakdown."""
+    Secs = [s for _, s in Records]
+    Overall = {
+        "count": len(Secs),
+        "avg": Mean(Secs),
+        "min": min(Secs) if Secs else 0.0,
+        "max": max(Secs) if Secs else 0.0,
+    }
+    PerModel: dict[str, dict] = {}
+    for ModelId in sorted({m for m, _ in Records}):
+        MSecs = [s for m, s in Records if m == ModelId]
+        PerModel[ModelId.rsplit("/", 1)[-1]] = {
+            "count": len(MSecs), "avg": Mean(MSecs), "min": min(MSecs), "max": max(MSecs),
+        }
+    return {"overall": Overall, "per_model": PerModel}
+
+
+def WriteReports(RootConfig, TestConfig, Records: list[dict], ElapsedSeconds: float,
+                 CaptionLatencies: "list[tuple[str, float]]",
+                 CaptionDurations: "list[float]",
+                 CaptionRetries: "list[tuple[str, int, bool]]") -> None:
     Paths = TestConfig["Paths"]
     Timestamp = datetime.now().isoformat(timespec="seconds")
+    Latency = LatencyStats(CaptionLatencies)
+    CaptionLatency = {
+        "count": len(CaptionDurations),
+        "avg": Mean(CaptionDurations),
+        "min": min(CaptionDurations) if CaptionDurations else 0.0,
+        "max": max(CaptionDurations) if CaptionDurations else 0.0,
+    }
+    RetryInfo = {
+        "retried_requests": sum(1 for _, _, ok in CaptionRetries if ok),
+        "failed_requests": sum(1 for _, _, ok in CaptionRetries if not ok),
+        "max_attempts": max((a for _, a, _ in CaptionRetries), default=1),
+        "by_model": {
+            ModelId.rsplit("/", 1)[-1]: {
+                "retried": sum(1 for m, _, ok in CaptionRetries if m == ModelId and ok),
+                "failed": sum(1 for m, _, ok in CaptionRetries if m == ModelId and not ok),
+            }
+            for ModelId in sorted({m for m, _, _ in CaptionRetries})
+        },
+    }
 
     # Aggregates.
     Overall = {
@@ -254,21 +310,24 @@ def WriteReports(RootConfig, TestConfig, Records: list[dict], ElapsedSeconds: fl
     with open(Paths["ReportJson"], "w", encoding="utf-8") as f:
         json.dump(
             {"timestamp": Timestamp, "elapsed_seconds": round(ElapsedSeconds, 1),
-             "config": ConfigSnapshot, "overall": Overall,
+             "config": ConfigSnapshot, "overall": Overall, "request_latency": Latency,
+             "caption_latency": CaptionLatency, "retries": RetryInfo,
              "per_style": PerStyle, "per_clip": PerClip, "records": Records},
             f, ensure_ascii=False, indent=2,
         )
 
     # Human summary -> text (printed AND appended).
     Report = FormatSummary(
-        RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle, PerClip, ElapsedSeconds
+        RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle, PerClip,
+        ElapsedSeconds, Latency, CaptionLatency, RetryInfo
     )
     print("\n" + Report)
     with open(Paths["ReportText"], "a", encoding="utf-8") as f:
         f.write("\n" + Report + "\n")
 
 
-def FormatSummary(RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle, PerClip, ElapsedSeconds) -> str:
+def FormatSummary(RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle, PerClip,
+                  ElapsedSeconds, Latency, CaptionLatency, RetryInfo) -> str:
     Bar = "=" * ReportWidth
     Rule = "-" * ReportWidth
     L: list[str] = []
@@ -321,6 +380,43 @@ def FormatSummary(RootConfig, TestConfig, Timestamp, Records, Overall, PerStyle,
     L.append(f"   accuracy    : {Overall['accuracy']:.3f}")
     L.append(f"   style_match : {Overall['style_match']:.3f}")
     L.append(f"   final score : {Overall['score']:.3f}")
+    L.append("")
+
+    # Per-FINAL-CAPTION latency: candidates (run concurrently) + judge, combined. This is the
+    # number that matters if "per request" means per caption. The 30s marker flags the cap.
+    Cl = CaptionLatency
+    CapFlag = "  <-- OVER 30s!" if Cl["max"] >= 30.0 else ("  <-- near 30s" if Cl["max"] >= 25.0 else "")
+    L.append(" PER CAPTION LATENCY (concurrent candidates + judge, end to end)")
+    L.append(f"   captions: {Cl['count']}   avg {Cl['avg']:.1f}s   min {Cl['min']:.1f}s   "
+             f"max {Cl['max']:.1f}s   (30s cap){CapFlag}")
+    L.append("")
+
+    # Per-request latency (captioning phase: every candidate + judge API call). THIS is the
+    # number that maps to the hackathon's "response time per request < 30s" rule.
+    Ov = Latency["overall"]
+    L.append(" PER REQUEST LATENCY (single candidate/judge API call -- maps to the 30s rule)")
+    L.append(f"   requests: {Ov['count']}   avg {Ov['avg']:.1f}s   min {Ov['min']:.1f}s   "
+             f"max {Ov['max']:.1f}s   (30s cap)")
+    if Latency["per_model"]:
+        L.append("   by model                     n     avg      min      max")
+        for ModelName, St in Latency["per_model"].items():
+            Flag = "  <-- near 30s cap" if St["max"] >= 25.0 else ""
+            L.append(f"   {ModelName:<24} {St['count']:>4}   {St['avg']:5.1f}s   "
+                     f"{St['min']:5.1f}s   {St['max']:5.1f}s{Flag}")
+    L.append("")
+
+    # Retries: explains any inflated PER CAPTION time. 0 retries => per-caption time is pure
+    # model+throttle; any retry adds >=6.5s backoff to that one caption (not to any request).
+    Rt = RetryInfo
+    L.append(" RETRIES / FAILURES (why a per-caption time may exceed its request times)")
+    L.append(f"   requests that retried then succeeded: {Rt['retried_requests']}   "
+             f"failed after all attempts: {Rt['failed_requests']}   "
+             f"max attempts on any request: {Rt['max_attempts']}")
+    if Rt["by_model"]:
+        for ModelName, Rc in Rt["by_model"].items():
+            L.append(f"   {ModelName:<24} retried={Rc['retried']}  failed={Rc['failed']}")
+    elif Rt["retried_requests"] == 0 and Rt["failed_requests"] == 0:
+        L.append("   none - every request succeeded on the first attempt")
     L.append("")
 
     # Per-style table.

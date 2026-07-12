@@ -41,6 +41,49 @@ def AwaitRequestSlot() -> None:
         time.sleep(WaitFor)
 
 
+# ---- Per-request latency + retry tracking (opt-in; used by the local test harness) ----
+# Latency: round-trip time of each successful API call as (model_id, seconds).
+# Retries: one record per request that needed more than one attempt, as (model_id, attempts,
+# succeeded) — so an inflated per-caption time is never a mystery (you can see the retry).
+# Both disabled by default (None), so the graded run is completely unaffected.
+_LatencyLock = threading.Lock()
+_LatencyRecords: "list[tuple[str, float]] | None" = None
+_RetryRecords: "list[tuple[str, int, bool]] | None" = None
+
+
+def EnableLatencyTracking() -> None:
+    """Start collecting per-request latencies and retries (also clears any prior records)."""
+    global _LatencyRecords, _RetryRecords
+    with _LatencyLock:
+        _LatencyRecords = []
+        _RetryRecords = []
+
+
+def GetLatencyRecords() -> "list[tuple[str, float]]":
+    with _LatencyLock:
+        return list(_LatencyRecords) if _LatencyRecords is not None else []
+
+
+def GetRetryRecords() -> "list[tuple[str, int, bool]]":
+    with _LatencyLock:
+        return list(_RetryRecords) if _RetryRecords is not None else []
+
+
+def RecordRetry(ModelId: str, Attempts: int, Succeeded: bool) -> None:
+    # Only called when a request used >1 attempt (or ultimately failed).
+    if _RetryRecords is None:
+        return
+    with _LatencyLock:
+        _RetryRecords.append((ModelId, Attempts, Succeeded))
+
+
+def RecordLatency(ModelId: str, Seconds: float) -> None:
+    if _LatencyRecords is None:
+        return
+    with _LatencyLock:
+        _LatencyRecords.append((ModelId, Seconds))
+
+
 def StripReasoning(Text: str) -> str:
     Cleaned = ThinkBlock.sub("", Text)
     # If thinking was truncated so only a closing tag survives, keep what follows it.
@@ -131,6 +174,8 @@ class FFireworksClient:
         for AttemptIndex in range(self.MaxRetries):
             try:
                 AwaitRequestSlot()  # global rate-limit spacing (no-op when disabled)
+                # Time only the actual round-trip, not the throttle wait above.
+                RequestStart: float = time.monotonic()
                 Response = requests.post(
                     Endpoint,
                     headers=RequestHeaders,
@@ -140,6 +185,9 @@ class FFireworksClient:
                 Response.raise_for_status()
                 ResponseData: dict = Response.json()
                 Content: str = ResponseData["choices"][0]["message"]["content"]
+                RecordLatency(self.ModelId, time.monotonic() - RequestStart)
+                if AttemptIndex > 0:  # succeeded, but only after one or more retries
+                    RecordRetry(self.ModelId, AttemptIndex + 1, True)
                 return StripReasoning(Content)
             except (requests.RequestException, KeyError, IndexError) as CaughtError:
                 LastError = CaughtError
@@ -147,6 +195,7 @@ class FFireworksClient:
                 if bHasMoreAttempts:
                     time.sleep(self.RetryDelay(AttemptIndex, CaughtError))
 
+        RecordRetry(self.ModelId, self.MaxRetries, False)  # exhausted all attempts, failed
         raise RuntimeError(
             f"Fireworks request failed after {self.MaxRetries} attempts: {LastError}"
         )

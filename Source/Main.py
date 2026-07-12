@@ -209,13 +209,24 @@ def FormatRunReport(
                 Lines.append(f"      (failed - using fallback: \"{FallbackCaption}\")")
                 continue
             if Trace.JudgeModelId is not None:
-                for ModelId, Caption in Trace.Candidates:
+                for Index, (ModelId, Caption) in enumerate(Trace.Candidates):
                     ShortId: str = ModelId.rsplit("/", 1)[-1]
-                    Lines.append(f"      {ShortId:<16} | {Caption}")
-                Lines.append(f"      >> FINAL (judge {Trace.JudgeModelId.rsplit('/', 1)[-1]}):")
+                    Secs: float = (
+                        Trace.CandidateDurations[Index]
+                        if Index < len(Trace.CandidateDurations) else 0.0
+                    )
+                    Lines.append(f"      {ShortId:<16} ({Secs:5.1f}s) | {Caption}")
+                JudgeShort: str = Trace.JudgeModelId.rsplit("/", 1)[-1]
+                Lines.append(
+                    f"      >> FINAL (judge {JudgeShort}, {Trace.JudgeDurationSeconds:.1f}s):"
+                )
                 Lines.append(f"         {Trace.FinalCaption}")
             else:
-                Lines.append(f"      >> FINAL: {Trace.FinalCaption}")
+                ModelId0, _ = Trace.Candidates[0]
+                Secs0: float = Trace.CandidateDurations[0] if Trace.CandidateDurations else 0.0
+                Lines.append(
+                    f"      >> FINAL ({ModelId0.rsplit('/', 1)[-1]}, {Secs0:.1f}s): {Trace.FinalCaption}"
+                )
     Lines.append(Bar)
     return "\n".join(Lines)
 

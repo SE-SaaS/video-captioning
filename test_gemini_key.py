@@ -6,6 +6,12 @@ import sys
 
 import requests
 
+# ── Model selection ───────────────────────────────────────────────
+# Set the Gemini model to use here. Leave as "" to auto-pick the first
+# model your key supports. An env var GEMINI_TEST_MODEL still overrides this.
+MODEL = "gemini-3.5-flash"
+# ──────────────────────────────────────────────────────────────────
+
 try:
     from dotenv import load_dotenv
     load_dotenv()
@@ -40,8 +46,8 @@ if not available:
     print("No usable models for this key.")
     sys.exit(1)
 
-# 2) Pick a model: env override, else the first available.
-model = os.environ.get("GEMINI_TEST_MODEL") or available[0]
+# 2) Pick a model: env override, else the MODEL constant, else first available.
+model = os.environ.get("GEMINI_TEST_MODEL") or MODEL or available[0]
 print(f"\nUsing model: {model}")
 
 # 3) Send an example prompt and print the output.

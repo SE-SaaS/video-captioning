@@ -3,35 +3,49 @@
 # Candidate caption models. ONE entry -> single-model mode (no judge). TWO OR MORE
 # entries -> ensemble: every model captions each style, then Judge produces the final one.
 Models:
-  # SINGLE-MODEL graded config: one model, no judge. Chosen because the graded run uses
-  # our own 10 RPM Fireworks key under a hard 10-min limit — an ensemble (~4 calls/caption)
-  # can't finish in time, but one call/caption (~48-60 total) fits comfortably.
-  # qwen3p7-plus scored 0.971 in local single-model testing (best of the candidates).
+  # ENSEMBLE graded config: 3 VLMs caption each style, then the Judge merges the best.
+  # Our paid key (6000 RPM) has no rate constraint, so the full run finishes in ~2-3 min,
+  # well under the 10-min limit. Highest-quality setup.
+  - Provider: google
+    # Gemini Pro (preview) via the OpenAI-compatible endpoint. Verified: valid ID + vision.
+    # NOTE: unlike flash, Pro's reasoning tokens count against max_tokens, so give big
+    # headroom or the caption truncates. Pro is stronger but pricier/slower than flash.
+    Id: "gemini-3.1-pro-preview"
+    BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
+    Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
+    MaxTokens: 8000
+    ReasoningEffort: low  # none | low | medium | high — 'none' disables thinking
   - Provider: fireworks
     Id: "accounts/fireworks/models/qwen3p7-plus"
     BaseUrl: "https://api.fireworks.ai/inference/v1"
-    Temperature: 0.4         # fallback, used only if a style is missing from StyleTemperatures
-    MaxTokens: 4000
-    ReasoningEffort: none    # none | low | medium | high — 'none' disables thinking
+    Temperature: 0.4
+    # Reasoning is ON (medium): qwen emits its chain-of-thought into a SEPARATE
+    # reasoning_content field (we read only 'content', so the caption stays clean).
+    # But reasoning burns lots of tokens BEFORE the answer — with too small a budget the
+    # answer gets truncated to empty. Give it plenty of headroom.
+    MaxTokens: 8000
+    ReasoningEffort: none
+  - Provider: google
+    # Gemini via its OpenAI-compatible endpoint. Verified: vision + reasoning_effort both
+    # work; key comes from GEMINI_API_KEY (derived from Provider). Flash is fast, so
+    # reasoning stays 'none' to keep this call well under the 30s per-request budget.
+    Id: "gemini-3.5-flash"
+    BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
+    Temperature: 0.4
+    MaxTokens: 8000
+    ReasoningEffort: low
   # Add more models here to enable ensembling. The API key env var is derived from
-  # Provider (fireworks -> FIREWORKS_API_KEY, google -> GEMINI_API_KEY). Gemini works
-  # through its OpenAI-compatible endpoint:
-  # - Provider: google
-  #   Id: "gemini-3.5-flash"
-  #   BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
-  #   Temperature: 0.4
-  #   MaxTokens: 2000
-  #   ReasoningEffort: none
+  # Provider (fireworks -> FIREWORKS_API_KEY, google -> GEMINI_API_KEY).
 
 # Judge LLM: only used when Models has 2+ entries. Picks the best candidate caption
 # or merges their best parts into one final caption per style.
 Judge:
-  Provider: fireworks
-  Id: "accounts/fireworks/models/qwen3p7-plus"
-  BaseUrl: "https://api.fireworks.ai/inference/v1"
+  Provider: google
+  Id: "gemini-3.1-pro-preview"
+  BaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai"
   Temperature: 0.3
-  MaxTokens: 4000
-  ReasoningEffort: none
+  MaxTokens: 5000          # gemini keeps thinking tokens separate, so no big headroom needed
+  ReasoningEffort: medium     # a little reasoning helps merging; gemini keeps traces internal (no leak)
   PassFrames: true           # true = also send the video frames to the judge; false = captions only
 
 # Per-style sampling temperature: low = precise/factual, high = creative/varied.
@@ -58,11 +72,10 @@ Client:
   MaxRetries: 3
   BackoffSeconds: 2.0
   # Global min seconds between EVERY API call (all threads share it). 0 = no throttle.
-  # Track 2 graded run uses OUR OWN Fireworks key, which is capped at 10 RPM (no payment
-  # method). 6.5s spacing keeps us safely under that. Single-model = ~48-60 calls, so the
-  # run finishes in ~5-6.5 min, well within the 10-min hard limit. Set to 0 if you add a
-  # payment method (6000 RPM) and switch back to the ensemble.
-  MinRequestIntervalSeconds: 6.5
+  # Our key is 6000 RPM, but Fireworks throttles sudden bursts, so a small 0.3s spacing
+  # smooths the ensemble's concurrent calls while still finishing in ~2-3 min. Raise to
+  # 6.5 only if reverting to a free 10 RPM key.
+  MinRequestIntervalSeconds: 0.3
 
 Runtime:
   MaxWorkers: 6           # concurrent (task, style) captioning units
